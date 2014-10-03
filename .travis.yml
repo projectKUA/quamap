@@ -4,13 +4,12 @@ rvm:
 deploy:
   provider: heroku
   api_key:
-    secure: iUtzfTpZBdZ4TPpdUvf5kPeqqMsaVSEMqN5lUJ6+3JWiy9Yy+zv/TBj0I490z9m1sgw2HnykZK4dV2rEmHrDOtENiDDWXCcxS+46Nys99ZkccSH7AlFkAelahkjW+Zj9GAfkegED6W4usp9kKDvqYMO9UoXQb2tC6UIAyWFra6U=
+    secure: wjzp93tGcuBClSja30cHYSJvK9FjL72Z6H0YQ/gqTzP+BOIbjt/yh5oFLpE+wOpinX8oMQNev3mbf9+pL+MdOvqBT3CmPjRkyIQu2mdvw3+l2HOEhqiq+N0k+iVqe6d3Jb7Q8oL/965uFsoRmrqlBrHIhMb23AeoSb3h819rM+o=
   app: quamap
   on:
     repo: projectKUA/quamap
-    branch: travis
 addons:
-  postgresql: "9.3"
+  postgresql: '9.3'
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - cp config/database.yml.travis config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
+- cp config/database.yml.travis config/database.yml
