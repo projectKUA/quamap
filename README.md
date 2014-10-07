@@ -14,4 +14,5 @@ quamap
 
 開発者:ProjectKUA
 
-
+======
+[![Build Status](https://travis-ci.org/projectKUA/quamap.svg?branch=master)](https://travis-ci.org/projectKUA/quamap)
