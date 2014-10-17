@@ -12,7 +12,7 @@ google.maps.event.addDomListener(window, 'load', function()
 	var mapOptions = {
 		zoom: 14,
 		center: center,
-		mapTypeIds: [google.maps.MapTypeId.TERRAIN, 'map_style'],
+		mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style'],
 		scaleControl: true
 	};
 	var mapObj = new google.maps.Map(document.getElementById('gmap'), mapOptions);
@@ -94,7 +94,7 @@ google.maps.event.addDomListener(window, 'load', function()
 			title: this[0]
 		});
 	});
-	var kmlUrl = "http://docs.google.com/uc?export=download&id=0B15A7hRyx7EISllXcDk2UERtbGc";
+	var kmlUrl = "http://docs.google.com/uc?export=download&id=0B2w7buxyq8qvU3hCZzFfWTFkajQ";
 	var kmlLayer = new google.maps.KmlLayer(kmlUrl);
 	kmlLayer.setMap(mapObj);
 
