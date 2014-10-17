@@ -12,6 +12,12 @@ quamap
 
 このアプリケーションでは、世界測地系（WGS84）で保存・表示しています。[2014.10.7]
 
+<a target="_blank"
+    href="readme.tiff">
+    <img style="max-width:100%;" alt="インセプションデッキ"
+        src="readme.tiff">
+</a>
+
 開発者:ProjectKUA
 
 ======
