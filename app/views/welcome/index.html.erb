@@ -85,6 +85,15 @@ google.maps.event.addDomListener(window, 'load', function()
 	];
 
 	// マーカーを作成
+	var icon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIVjJTNkZpYjJGQlk',
+		// This marker is 20 pixels wide by 32 pixels tall.
+		new google.maps.Size(24, 24),
+		// The origin for this image is 0,0.
+		new google.maps.Point(0,0),
+		// The anchor for this image is the base of the flagpole at 0,32.
+		new google.maps.Point(0, 24)
+	);
+
 	jQuery.each(stations, function()
 	{
 		var latlng = new google.maps.LatLng(this[1], this[2]);
@@ -93,9 +102,13 @@ google.maps.event.addDomListener(window, 'load', function()
 			map: mapObj,
 			title: this[0]
 		});
+
 	});
-	var kmlUrl = "http://docs.google.com/uc?export=download&id=0B2w7buxyq8qvU3hCZzFfWTFkajQ";
-	var kmlLayer = new google.maps.KmlLayer(kmlUrl);
+
+	var kmlLayer = new google.maps.KmlLayer({
+		driveFileId: "0B2w7buxyq8qvU3hCZzFfWTFkajQ",
+		preserveViewport: true
+	});
 	kmlLayer.setMap(mapObj);
 
 });
