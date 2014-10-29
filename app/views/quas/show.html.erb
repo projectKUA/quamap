@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @qua.name %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @qua.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @qua.longitude %>
+</p>
+
+<p>
+  <strong>Quality:</strong>
+  <%= @qua.quality %>
+</p>
+
+<p>
+  <strong>Effect:</strong>
+  <%= @qua.effect %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @qua.url %>
+</p>
+
+<%= link_to 'Edit', edit_qua_path(@qua) %> |
+<%= link_to 'Back', quas_path %>

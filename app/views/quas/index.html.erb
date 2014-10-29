@@ -1,0 +1,35 @@
+<h1>Listing quas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Quality</th>
+      <th>Effect</th>
+      <th>Url</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @quas.each do |qua| %>
+      <tr>
+        <td><%= qua.name %></td>
+        <td><%= qua.latitude %></td>
+        <td><%= qua.longitude %></td>
+        <td><%= qua.quality %></td>
+        <td><%= qua.effect %></td>
+        <td><%= qua.url %></td>
+        <td><%= link_to 'Show', qua %></td>
+        <td><%= link_to 'Edit', edit_qua_path(qua) %></td>
+        <td><%= link_to 'Destroy', qua, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Qua', new_qua_path %>
