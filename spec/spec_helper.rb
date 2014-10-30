@@ -75,4 +75,9 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 =end
+
+  config.before(:all) do
+    FactoryGirl.reload
+  end
 end
+
