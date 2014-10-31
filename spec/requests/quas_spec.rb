@@ -15,9 +15,9 @@ RSpec.describe "Quas", :type => :request do
       expect(response.status).to be(200)
     end
   end
-  describe "GET /quas/1" do
+  describe "GET /quas/new" do
     it "正常にHTTPレスポンスコード200が返される。" do
-      get "/quas.json"
+      get new_qua_path
       expect(response.status).to be(200)
     end
   end
