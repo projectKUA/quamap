@@ -5,7 +5,6 @@ FactoryGirl.define do
     longitude 9.99
     quality "MyString"
     effect "MyString"
-    url "MyString"
+    url "MyString" 
   end
 end
-
