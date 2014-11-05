@@ -3,6 +3,7 @@ rvm:
 - 2.1.2
 deploy:
   provider: heroku
+  strategy: git
   api_key:
     secure: wjzp93tGcuBClSja30cHYSJvK9FjL72Z6H0YQ/gqTzP+BOIbjt/yh5oFLpE+wOpinX8oMQNev3mbf9+pL+MdOvqBT3CmPjRkyIQu2mdvw3+l2HOEhqiq+N0k+iVqe6d3Jb7Q8oL/965uFsoRmrqlBrHIhMb23AeoSb3h819rM+o=
   app: quamap
