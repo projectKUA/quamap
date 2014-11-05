@@ -5,9 +5,9 @@
 	<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+	<%= javascript_include_tag "googlemap" %>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript">
-/**  */
 function getQuaDialogString(name, quality, effect, url){
 	var ret =
 		'<div id="content">'+
@@ -20,43 +20,6 @@ function getQuaDialogString(name, quality, effect, url){
 	  '</div></div>';
 	return ret;
 }
-
-	var styles = [
-	{
-		"featureType": "administrative.country",
-		"stylers": [
-			{ "visibility": "off" }
-		]
-	},{
-		"elementType": "labels",
-		"stylers": [
-			{ "visibility": "off" }
-		]
-	},{
-		"featureType": "landscape",
-		"stylers": [
-			{ "color": "#ffffff" }
-		]
-	},{
-		"featureType": "poi",
-		"stylers": [
-			{ "visibility": "off" }
-		]
-	},{
-		"featureType": "road",
-		"elementType": "geometry.fill",
-		"stylers": [
-			{ "visibility": "on" },
-			{ "color": "#ffffff" }
-		]
-	},{
-		"elementType": "geometry.stroke",
-		"stylers": [
-			{ "color": "#cfcfd0" }
-		]
-	}
-];
-
 // 温泉情報　名称,緯度,経度,泉質,効能
 var stations = [
     <% @quas.each do |q| %>
