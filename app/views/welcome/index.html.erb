@@ -120,9 +120,6 @@ var stations = [
 		<br />
 		<a href='/quas' target='_blank'>Quas</button>
 	</div>
-<div id="dialog" title="温泉を登録する" style='display:none;'>
-	<% @qua = Qua.new %>
-	<%= render :template => 'quas/_form2' %>
-</div>
+<%= render 'qua_entry_dialog' %>
 </body>
 </html>
