@@ -1,4 +1,4 @@
-<%= form_for(@qua) do |f| %>
+<%= form_for(@qua, :url => {:action => 'create_ajax', :controller => 'quas'}, :remote => true) do |f| %>
   <% if @qua.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@qua.errors.count, "error") %> prohibited this qua from being saved:</h2>
@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
-
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
   <div class="field">
     名前<br>
     <%= f.text_field :name %>

@@ -36,6 +36,19 @@ class QuasController < ApplicationController
       end
     end
   end
+  def create_ajax
+    @qua = Qua.new(qua_params)
+
+    respond_to do |format|
+      if @qua.save
+        format.json {
+          render json: { :qua => @qua }
+        }
+      else
+        format.json { render json: @qua.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # PATCH/PUT /quas/1
   # PATCH/PUT /quas/1.json
