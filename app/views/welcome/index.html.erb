@@ -37,8 +37,7 @@ var stations = [
 
 			google.maps.event.addDomListener(window, 'load', function()
 			{
-
-				var center = new google.maps.LatLng(38.743224, 140.715955);
+				var center = new google.maps.LatLng(<%= @center.latitude %>, <%= @center.longitude %>);
 				var mapOptions = {
 					zoom: 14,
 					center: center,
