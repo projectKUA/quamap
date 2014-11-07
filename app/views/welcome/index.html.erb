@@ -8,9 +8,11 @@
 	<%= javascript_include_tag "googlemap" %>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript">
-function getQuaDialogString(name, quality, effect, url){
+	// google map object
+	var mapObj
+function getQuaDialogString(id, name, quality, effect, url){
 	var ret =
-		'<div id="content">'+
+		'<div id="content_qua_' + id + '">'+
 	  '<div id="siteNotice"></div>'+
 	  '<h1 id="firstHeading" class="firstHeading" style="white-space: nowrap;">' + name + '</h1>'+
 	  '<div id="bodyContent">'+
@@ -20,13 +22,40 @@ function getQuaDialogString(name, quality, effect, url){
 	  '</div></div>';
 	return ret;
 }
-// 温泉情報　名称,緯度,経度,泉質,効能
+	// 温泉情報　名称,緯度,経度,泉質,効能
 var stations = [
     <% @quas.each do |q| %>
-	[ '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.url %>' ] <%= ", " unless q == @quas.last %>
+	[ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.url %>' ] <%= ", " unless q == @quas.last %>
     <% end %>
 ];
 
+	// マーカーを作成
+	var icon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIVjJTNkZpYjJGQlk',
+		// This marker is 20 pixels wide by 32 pixels tall.
+		new google.maps.Size(24, 24),
+		// The origin for this image is 0,0.
+		new google.maps.Point(0,0),
+		// The anchor for this image is the base of the flagpole at 0,32.
+		new google.maps.Point(0, 24)
+	);
+	function entryMapIcon(id, title, lat, lng, quality, effect, url, disp){
+			var latlng = new google.maps.LatLng(lat, lng);
+			var marker = new google.maps.Marker({
+				position: latlng,
+				map: mapObj,
+				title: title,
+				icon: icon
+			});
+			var infowindow = new google.maps.InfoWindow({
+				content: getQuaDialogString(id, title, quality, effect, url)
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+			  infowindow.open(mapObj,marker);
+			});
+			if(disp){
+			  infowindow.open(mapObj,marker);
+			}
+	}
 	(function($){
 		$(function() {
 
@@ -34,9 +63,7 @@ var stations = [
 				$("#qua_latitude").val(e.latLng.lat());
 				$("#qua_longitude").val(e.latLng.lng());
 			}
-
-			google.maps.event.addDomListener(window, 'load', function()
-			{
+			function  displayMap(){
 				var center = new google.maps.LatLng(<%= @center.latitude %>, <%= @center.longitude %>);
 				var mapOptions = {
 					zoom: 14,
@@ -44,7 +71,7 @@ var stations = [
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style'],
 					scaleControl: true
 				};
-				var mapObj = new google.maps.Map(document.getElementById('gmap'), mapOptions);
+				mapObj = new google.maps.Map(document.getElementById('gmap'), mapOptions);
 
 				// Create a new StyledMapType object, passing it the array of styles,
 				// as well as the name to be displayed on the map type control.
@@ -54,31 +81,8 @@ var stations = [
 				mapObj.mapTypes.set('map_style', styledMap);
 				mapObj.setMapTypeId('map_style');
 
-				// マーカーを作成
-				var icon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIVjJTNkZpYjJGQlk',
-					// This marker is 20 pixels wide by 32 pixels tall.
-					new google.maps.Size(24, 24),
-					// The origin for this image is 0,0.
-					new google.maps.Point(0,0),
-					// The anchor for this image is the base of the flagpole at 0,32.
-					new google.maps.Point(0, 24)
-				);
-
-				$.each(stations, function()
-				{
-					var latlng = new google.maps.LatLng(this[1], this[2]);
-					var marker = new google.maps.Marker({
-						position: latlng,
-						map: mapObj,
-						title: this[0],
-						icon: icon
-					});
-					var infowindow = new google.maps.InfoWindow({
-						content: getQuaDialogString(this[0], this[3], this[4], this[5])
-					});
-					google.maps.event.addListener(marker, 'click', function() {
-					  infowindow.open(mapObj,marker);
-					});
+				$.each(stations, function(){
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], false);
 				});
 				var kmlLayer = new google.maps.KmlLayer({
 					driveFileId: "0B2w7buxyq8qvU3hCZzFfWTFkajQ",
@@ -86,16 +90,29 @@ var stations = [
 				});
 				kmlLayer.setMap(mapObj);
 				google.maps.event.addListener(mapObj, 'click', mapClicked);
-			});
+			};
+			google.maps.event.addDomListener(window, 'load', displayMap);
 
 			$("#buttonEntryQua").click(function(){
 				$("#dialog").dialog(
 					{ buttons: [{
 						text: "登録", click: function() {
-							// #new_quaにsubmitを行なう。
+							// #new_qusubmitを行なう。
 							// 実行後にwelcome/index.html.erbを再表示する。
-							$("#new_qua").submit();
-							// $(this).dialog( "close" );
+							// $("#new_qua").ajax(  );
+							$.ajax({
+								url: $("#new_qua").attr('action'),
+								type: $("#new_qua").attr('method'),
+								data: $("#new_qua").serialize(),
+								dataType: "json",
+								success: function(data) {
+									var qua = data.qua;
+									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, qua.url, true);
+									$("#dialog").dialog( "close" );
+								}
+
+							});
+
 						}
 					},{
 						text: "キャンセル", click: function() {
@@ -119,9 +136,6 @@ var stations = [
 		<br />
 		<a href='/quas' target='_blank'>Quas</button>
 	</div>
-<div id="dialog" title="温泉を登録する" style='display:none;'>
-	<% @qua = Qua.new %>
-	<%= render :template => 'quas/_form2' %>
-</div>
+<%= render 'qua_entry_dialog' %>
 </body>
 </html>
