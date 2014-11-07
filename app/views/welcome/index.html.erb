@@ -38,7 +38,7 @@ var stations = [
 		// The anchor for this image is the base of the flagpole at 0,32.
 		new google.maps.Point(0, 24)
 	);
-	function entryMapIcon(id, title, lat, lng, quality, effect, url){
+	function entryMapIcon(id, title, lat, lng, quality, effect, url, disp){
 			var latlng = new google.maps.LatLng(lat, lng);
 			var marker = new google.maps.Marker({
 				position: latlng,
@@ -52,6 +52,9 @@ var stations = [
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
 			});
+			if(disp){
+			  infowindow.open(mapObj,marker);
+			}
 	}
 	(function($){
 		$(function() {
@@ -79,7 +82,7 @@ var stations = [
 				mapObj.setMapTypeId('map_style');
 
 				$.each(stations, function(){
-					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6]);
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], false);
 				});
 				var kmlLayer = new google.maps.KmlLayer({
 					driveFileId: "0B2w7buxyq8qvU3hCZzFfWTFkajQ",
@@ -104,7 +107,7 @@ var stations = [
 								dataType: "json",
 								success: function(data) {
 									var qua = data.qua;
-									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, qua.url);
+									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, qua.url, true);
 									$("#dialog").dialog( "close" );
 								}
 
