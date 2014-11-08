@@ -1,6 +1,28 @@
-quamap
+### quamap
 
-======
+どうしても忘れられない温泉の思い出や温泉体験を共有したい方のための
+
+quamapというプロダクトは、
+
+温泉の情報に特化した地図情報サービスです。
+
+これは、温泉の情報や温泉体験を地図上で共有することができます。
+
+twitterやfacebookなどのSNS・マイクロブログに温泉体験を共有することとは異なり、
+
+温泉に特化した体験を共有できます。
+
+
+[![Build Status](https://travis-ci.org/projectKUA/quamap.svg?branch=master)](https://travis-ci.org/projectKUA/quamap)
+---
+---
+---
+---
+---
+---
+---
+
+(旧版)
 
 このWEBアプリケーションでは、宮城県大崎市　鳴子温泉郷にある温泉の名前と位置を地図情報空間で確認することができます。[2014.10.3]
 
@@ -17,4 +39,4 @@ quamap
 開発者:ProjectKUA
 
 ======
-[![Build Status](https://travis-ci.org/projectKUA/quamap.svg?branch=master)](https://travis-ci.org/projectKUA/quamap)
+
