@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :reviews
+
   resources :quas do
     collection do
       post 'create_ajax'

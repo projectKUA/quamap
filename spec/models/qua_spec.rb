@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 require 'rails_helper'
 
 RSpec.describe Qua, :type => :model do
   before do
-    FactoryGirl.create(:qua)
+    FactoryGirl.create(:qua1)
   end
   context "Qua.center" do
     before do
