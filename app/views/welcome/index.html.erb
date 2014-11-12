@@ -12,7 +12,7 @@
 	var mapObj
 function getQuaDialogString(id, name, quality, effect, url){
 	var ret =
-		'<div id="content_qua_' + id + '">'+
+	  '<div id="content_qua_' + id + '">'+
 	  '<div id="siteNotice"></div>'+
 	  '<h1 id="firstHeading" class="firstHeading" style="white-space: nowrap;">' + name + '</h1>'+
 	  '<div id="bodyContent">'+
@@ -82,7 +82,10 @@ var stations = [
 				mapObj.setMapTypeId('map_style');
 
 				$.each(stations, function(){
-					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], false);
+                    var eps = 1e-6;
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], 
+					    this[2] - eps < center.lat() && center.lat() < this[2] + eps 
+					    && this[3] - eps < center.lng() && center.lng() < this[3] + eps );
 				});
 				var kmlLayer = new google.maps.KmlLayer({
 					driveFileId: "0B2w7buxyq8qvU3hCZzFfWTFkajQ",
