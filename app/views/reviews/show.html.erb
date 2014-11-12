@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Qua:</strong>
+  <%= @review.qua %>
+</p>
+
+<p>
+  <strong>Total score:</strong>
+  <%= @review.total_score %>
+</p>
+
+<p>
+  <strong>Quality score:</strong>
+  <%= @review.quality_score %>
+</p>
+
+<p>
+  <strong>Convinience score:</strong>
+  <%= @review.convinience_score %>
+</p>
+
+<p>
+  <strong>Cost score:</strong>
+  <%= @review.cost_score %>
+</p>
+
+<p>
+  <strong>Sight score:</strong>
+  <%= @review.sight_score %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @review.comment %>
+</p>
+
+<p>
+  <strong>Photo data:</strong>
+  <%= @review.photo_data %>
+</p>
+
+<p>
+  <strong>Photo title:</strong>
+  <%= @review.photo_title %>
+</p>
+
+<%= link_to 'Edit', edit_review_path(@review) %> |
+<%= link_to 'Back', reviews_path %>
