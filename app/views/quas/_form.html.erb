@@ -35,6 +35,15 @@
     <%= f.label :url %><br>
     <%= f.text_field :url %>
   </div>
+  <div class="field">
+    <%= f.label :stay_required %><br>
+    <%= f.radio_button :stay_required, "0" %>not required
+    <%= f.radio_button :stay_required, "1" %>required
+  </div>
+  <div class="fields">
+    <%= f.label :price %><br>
+    <%= f.text_field :price %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
