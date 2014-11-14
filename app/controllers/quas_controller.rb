@@ -82,6 +82,6 @@ class QuasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def qua_params
-      params.require(:qua).permit(:name, :latitude, :longitude, :quality, :effect, :url)
+      params.require(:qua).permit(:name, :latitude, :longitude, :quality, :effect, :url, :stay_required, :price)
     end
 end

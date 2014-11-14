@@ -35,4 +35,13 @@
     Webサイト<br>
     <%= f.text_field :url %>
   </div>
+  <div class="field">
+    宿泊の必要<br>
+    <%= f.radio_button :stay_required, "0" %>無
+    <%= f.radio_button :stay_required, "1" %>有
+  </div>
+  <div class="fields">
+    料金<br>
+    <%= f.text_field :price %>
+  </div>
 <% end %>
