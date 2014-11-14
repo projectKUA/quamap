@@ -10,24 +10,26 @@
 	<script type="text/javascript">
 	// google map object
 	var mapObj
-function getQuaDialogString(id, name, quality, effect, url){
-	var ret =
-	  '<div id="content_qua_' + id + '">'+
-	  '<div id="siteNotice"></div>'+
-	  '<h1 id="firstHeading" class="firstHeading" style="white-space: nowrap;">' + name + '</h1>'+
-	  '<div id="bodyContent">'+
-	  '<p style="white-space: nowrap;"><b>泉質:</b>' + quality + '</p>'+
-	  '<p><b>効能:</b>' + effect + '</p>'+
-	  '<p style="white-space: nowrap;"><b>HP:</b><a href="' + url + '" target="_brank">' + url + '</a></p>' +
-	  '</div></div>';
-	return ret;
-}
+    function getQuaDialogString(id, name, quality, effect, stay_required, price, url){
+    	var ret =
+    	  '<div id="content_qua_' + id + '">'+
+    	  '<div id="siteNotice"></div>'+
+    	  '<h1 id="firstHeading" class="firstHeading" style="white-space: nowrap;">' + name + '</h1>'+
+    	  '<div id="bodyContent">'+
+    	  '<p style="white-space: nowrap;"><b>泉質:</b>' + quality + '</p>'+
+    	  '<p><b>効能:</b>' + effect + '</p>'+
+    	  '<p><b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</p>'+
+    	  '<p><b>料金:</b>' + price + '</p>'+
+    	  '<p style="white-space: nowrap;"><b>HP:</b><a href="' + url + '" target="_brank">' + url + '</a></p>' +
+    	  '</div></div>';
+    	return ret;
+    }
 	// 温泉情報　名称,緯度,経度,泉質,効能
-var stations = [
-    <% @quas.each do |q| %>
-	[ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.url %>' ] <%= ", " unless q == @quas.last %>
-    <% end %>
-];
+    var stations = [
+        <% @quas.each do |q| %>
+	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>' ] <%= ", " unless q == @quas.last %>
+        <% end %>
+    ];
 
 	// マーカーを作成
 	var icon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIVjJTNkZpYjJGQlk',
@@ -38,7 +40,7 @@ var stations = [
 		// The anchor for this image is the base of the flagpole at 0,32.
 		new google.maps.Point(0, 24)
 	);
-	function entryMapIcon(id, title, lat, lng, quality, effect, url, disp){
+	function entryMapIcon(id, title, lat, lng, quality, effect, stay_required, price, url, disp){
 			var latlng = new google.maps.LatLng(lat, lng);
 			var marker = new google.maps.Marker({
 				position: latlng,
@@ -47,7 +49,7 @@ var stations = [
 				icon: icon
 			});
 			var infowindow = new google.maps.InfoWindow({
-				content: getQuaDialogString(id, title, quality, effect, url)
+				content: getQuaDialogString(id, title, quality, effect, stay_required, price, url)
 			});
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
@@ -83,7 +85,7 @@ var stations = [
 
 				$.each(stations, function(){
                     var eps = 1e-6;
-					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], 
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8], 
 					    this[2] - eps < center.lat() && center.lat() < this[2] + eps 
 					    && this[3] - eps < center.lng() && center.lng() < this[3] + eps );
 				});
@@ -110,7 +112,8 @@ var stations = [
 								dataType: "json",
 								success: function(data) {
 									var qua = data.qua;
-									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, qua.url, true);
+									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, 
+										qua.stay_required, qua.price, qua.url, true);
 									$("#dialog").dialog( "close" );
 								}
 
