@@ -1,5 +1,5 @@
 class QuasController < ApplicationController
-  before_action :set_qua, only: [:show, :edit, :update, :destroy]
+  before_action :set_qua, only: [:show, :edit, :update, :destroy, :show_image]
 
   # GET /quas
   # GET /quas.json
@@ -74,6 +74,10 @@ class QuasController < ApplicationController
     end
   end
 
+  def show_image
+    send_data @image.image1, :type => 'image/jpeg', :disposition => 'inline'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_qua
@@ -82,6 +86,8 @@ class QuasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def qua_params
-      params.require(:qua).permit(:name, :latitude, :longitude, :quality, :effect, :url, :stay_required, :price)
+      params.require(:qua).permit(:name, :latitude, :longitude, 
+        :quality, :effect, :url, :stay_required, :price, 
+        :image1_caption, :image1, :image2_caption, :image2, :image3_caption, :image3)
     end
 end
