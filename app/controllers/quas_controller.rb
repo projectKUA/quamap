@@ -75,7 +75,7 @@ class QuasController < ApplicationController
   end
 
   def show_image
-    send_data @image.image1, :type => 'image/jpeg', :disposition => 'inline'
+    send_data @qua.image1, :type => 'image/jpeg', :disposition => 'inline'
   end
 
   private
