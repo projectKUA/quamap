@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 	// google map object
 	var mapObj
-    function getQuaDialogString(id, name, quality, effect, stay_required, price, url){
+    function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
     	var ret =
     	  '<div id="content_qua_' + id + '">'+
     	  '<div id="siteNotice"></div>'+
@@ -21,13 +21,15 @@
     	  '<p><b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</p>'+
     	  '<p><b>料金:</b>' + price + '</p>'+
     	  '<p style="white-space: nowrap;"><b>HP:</b><a href="' + url + '" target="_brank">' + url + '</a></p>' +
+    	  '<p>' + image_caption + '</p>'+
+    	  '<p>' + image + '</p>' +
     	  '</div></div>';
     	return ret;
     }
 	// 温泉情報　名称,緯度,経度,泉質,効能
     var stations = [
         <% @quas.each do |q| %>
-	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>' ] <%= ", " unless q == @quas.last %>
+	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>', '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>', '<%= q.image1_caption %>', '<%= image_tag show_image_qua_path(q), class:'qua-img', alt:'No image' %>'] <%= ", " unless q == @quas.last %>
         <% end %>
     ];
 
@@ -40,7 +42,7 @@
 		// The anchor for this image is the base of the flagpole at 0,32.
 		new google.maps.Point(0, 24)
 	);
-	function entryMapIcon(id, title, lat, lng, quality, effect, stay_required, price, url, disp){
+	function entryMapIcon(id, title, lat, lng, quality, effect, stay_required, price, url, image_caption, image, disp){
 			var latlng = new google.maps.LatLng(lat, lng);
 			var marker = new google.maps.Marker({
 				position: latlng,
@@ -49,7 +51,7 @@
 				icon: icon
 			});
 			var infowindow = new google.maps.InfoWindow({
-				content: getQuaDialogString(id, title, quality, effect, stay_required, price, url)
+				content: getQuaDialogString(id, title, quality, effect, stay_required, price, url, image_caption, image)
 			});
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
@@ -85,7 +87,8 @@
 
 				$.each(stations, function(){
                     var eps = 1e-6;
-					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8], 
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8], this[9], 
+						this[10], 
 					    this[2] - eps < center.lat() && center.lat() < this[2] + eps 
 					    && this[3] - eps < center.lng() && center.lng() < this[3] + eps );
 				});
@@ -112,13 +115,12 @@
 								dataType: "json",
 								success: function(data) {
 									var qua = data.qua;
+									var image = '<img alt="No image" src="/quas/' + qua.id + '/show_image">'
 									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, 
-										qua.stay_required, qua.price, qua.url, true);
+										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );
 								}
-
 							});
-
 						}
 					},{
 						text: "キャンセル", click: function() {

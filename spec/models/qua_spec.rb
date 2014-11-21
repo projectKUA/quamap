@@ -5,7 +5,7 @@ RSpec.describe Qua, :type => :model do
   before do
     FactoryGirl.create(:qua1)
   end
-  context "Qua.center" do
+  context "Qua#center" do
     before do
       @q = Qua.center
     end

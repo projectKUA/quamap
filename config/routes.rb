@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   resources :reviews
 
   resources :quas do
+    member do
+      get 'show_image'
+    end
     collection do
       post 'create_ajax'
     end
