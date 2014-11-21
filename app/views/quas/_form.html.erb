@@ -40,15 +40,15 @@
     <%= f.radio_button :stay_required, "0" %>not required
     <%= f.radio_button :stay_required, "1" %>required
   </div>
-  <div class="fields">
+  <div class="field">
     <%= f.label :price %><br>
     <%= f.text_field :price %>
   </div>
-  <div>
+  <div class="field">
     <%= f.label :image1_caption %><br>
     <%= f.text_field :image1_caption %>
   </div>
-  <div>
+  <div class="field">
     <%= f.label :image1 %><br>
     <%= f.file_field :image1, accept: "image/jpeg" %>
   </div>

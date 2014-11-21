@@ -1,5 +1,5 @@
 class QuasController < ApplicationController
-  before_action :set_qua, only: [:show, :edit, :update, :destroy, :show_image]
+  before_action :set_qua, only: [:show, :edit, :update, :destroy, :show, :show_image]
 
   # GET /quas
   # GET /quas.json
@@ -24,7 +24,7 @@ class QuasController < ApplicationController
   # POST /quas
   # POST /quas.json
   def create
-    @qua = Qua.new(qua_params)
+    @qua = quaWithUploadedFile(qua_params)
 
     respond_to do |format|
       if @qua.save
@@ -37,7 +37,7 @@ class QuasController < ApplicationController
     end
   end
   def create_ajax
-    @qua = Qua.new(qua_params)
+    @qua = quaWithUploadedFile(qua_params)
 
     respond_to do |format|
       if @qua.save
@@ -89,5 +89,23 @@ class QuasController < ApplicationController
       params.require(:qua).permit(:name, :latitude, :longitude, 
         :quality, :effect, :url, :stay_required, :price, 
         :image1_caption, :image1, :image2_caption, :image2, :image3_caption, :image3)
+    end
+
+    def quaWithUploadedFile(qua_params)
+      upload_file = qua_params[:image1]
+      qua = {}
+      qua[:name] = qua_params[:name]
+      qua[:latitude] = qua_params[:latitude]
+      qua[:longitude] = qua_params[:longitude]
+      qua[:quality] = qua_params[:quality]
+      qua[:effect] = qua_params[:effect]
+      qua[:url] = qua_params[:url]
+      qua[:stay_required] = qua_params[:stay_required]
+      qua[:price] = qua_params[:price]
+      if upload_file != nil
+         qua[:image1] = upload_file.read
+         qua[:image1_caption] = qua_params[:image1_caption]
+      end
+      Qua.new(qua)
     end
 end
