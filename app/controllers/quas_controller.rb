@@ -54,7 +54,10 @@ class QuasController < ApplicationController
   # PATCH/PUT /quas/1.json
   def update
     respond_to do |format|
-      if @qua.update(qua_params)
+      q = quaWithUploadedFile(qua_params).attributes
+      q["id"] = params[:id]
+
+      if @qua.update(q)
         format.html { redirect_to @qua, notice: 'Qua was successfully updated.' }
         format.json { render :show, status: :ok, location: @qua }
       else
