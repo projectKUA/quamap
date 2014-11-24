@@ -5,6 +5,8 @@
 	<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+	<script src="http://malsup.github.com/jquery.form.js"></script>
+	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
 	<%= javascript_include_tag "googlemap" %>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript">
@@ -87,9 +89,9 @@
 
 				$.each(stations, function(){
                     var eps = 1e-6;
-					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8], this[9], 
-						this[10], 
-					    this[2] - eps < center.lat() && center.lat() < this[2] + eps 
+					entryMapIcon(this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8], this[9],
+						this[10],
+					    this[2] - eps < center.lat() && center.lat() < this[2] + eps
 					    && this[3] - eps < center.lng() && center.lng() < this[3] + eps );
 				});
 				var kmlLayer = new google.maps.KmlLayer({
@@ -105,9 +107,17 @@
 				$("#dialog").dialog(
 					{ buttons: [{
 						text: "登録", click: function() {
-							// #new_qusubmitを行なう。
+							// #new_quaにsubmitを行なう。
 							// 実行後にwelcome/index.html.erbを再表示する。
-							// $("#new_qua").ajax(  );
+							$("#new_qua").ajaxSubmit(function(data) {
+									var qua = data.qua;
+									var image = '<img alt="No image" src="/quas/' + qua.id + '/show_image">'
+									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
+										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
+									$("#dialog").dialog( "close" );
+							});
+
+							/*
 							$.ajax({
 								url: $("#new_qua").attr('action'),
 								type: $("#new_qua").attr('method'),
@@ -116,11 +126,13 @@
 								success: function(data) {
 									var qua = data.qua;
 									var image = '<img alt="No image" src="/quas/' + qua.id + '/show_image">'
-									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect, 
+									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
 										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );
 								}
 							});
+*/
+
 						}
 					},{
 						text: "キャンセル", click: function() {
