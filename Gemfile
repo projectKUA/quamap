@@ -34,6 +34,8 @@ gem 'spring',        group: :development
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+# Use activesupport-json_encoder for async register with json format
+gem 'activesupport-json_encoder', '~> 1.1.0'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
