@@ -75,7 +75,7 @@
         <% @quas.each do |q| %>
 	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>',
 	    '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>', '<%= q.image1_caption %>',
-	    '<%= image_tag show_image_qua_path(q), class:'img_info_window', alt: q.image1_caption %>'] <%= ", " unless q == @quas.last %>
+	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'qua-img', alt:'No image') : '' %>'] <%= ", " unless q == @quas.last %>
         <% end %>
     ];
 
@@ -153,11 +153,11 @@
 				$("#dialog").dialog(
 					{ buttons: [{
 						text: "登録", click: function() {
-							// #new_qusubmitを行なう。
+							// #new_quaにsubmitを行なう。
 							// 実行後にwelcome/index.html.erbを再表示する。
 							$("#new_qua").ajaxSubmit(function(data) {
 									var qua = data.qua;
-									var image = '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
+									var image = qua.image1 == null ? '' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
 									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
 										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );
