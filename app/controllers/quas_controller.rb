@@ -105,9 +105,9 @@ class QuasController < ApplicationController
       qua[:url] = qua_params[:url]
       qua[:stay_required] = qua_params[:stay_required]
       qua[:price] = qua_params[:price]
-      if upload_file != nil
+      qua[:image1_caption] = qua_params[:image1_caption]
+      if upload_file != nil && upload_file != ''
          qua[:image1] = upload_file.read
-         qua[:image1_caption] = qua_params[:image1_caption]
       end
       Qua.new(qua)
     end
