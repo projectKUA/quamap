@@ -111,7 +111,7 @@
 							// 実行後にwelcome/index.html.erbを再表示する。
 							$("#new_qua").ajaxSubmit(function(data) {
 									var qua = data.qua;
-									var image = '<img alt="No image" src="/quas/' + qua.id + '/show_image">'
+									var image = '<img class="qua-img" alt="No image" src="/quas/' + qua.id + '/show_image">'
 									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
 										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );
