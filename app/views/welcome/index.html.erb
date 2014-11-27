@@ -25,6 +25,25 @@
 	}
 	</style>
 	<script type="text/javascript">
+	function reviewLinkClicked(link){
+	(function($){
+		$(function() {
+			var id = $(link).attr("id").substr(17);	// link.id = "link_show_review_xxx", and qua_id = xxx.
+			alert("どうでしょう、どうなの" + id);
+		});
+	})(jQuery);
+
+/*
+		$("#new_qua").ajaxSubmit(function(data) {
+				var qua = data.qua;
+				var image = '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
+				entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
+					qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
+				$("#dialog").dialog( "close" );
+		});
+*/
+
+	}
 	// google map object
 	var mapObj;
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
@@ -45,7 +64,8 @@
 					ret += '<p style="white-space: nowrap;"><b>No Website</b></a></p>';
 				}
 				ret += '</div>';	// end of 'bodyContent'
-				ret += '<div><a id="link_show_review_' + id + '" class="review_dialog_open">レビューを見る</a></div>';
+				// ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></div>';
+				ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
 				ret += '</div>';	// end of 'content_qua_xxx'
     	  '</div></div>';
     	return ret;
@@ -88,7 +108,6 @@
 	}
 	(function($){
 		$(function() {
-
 			function mapClicked(e){
 				$("#qua_latitude").val(e.latLng.lat());
 				$("#qua_longitude").val(e.latLng.lng());
@@ -130,7 +149,6 @@
 				traisition: '0.3s all',
 				opacity: 0.3
 			});
-
 			$("#buttonEntryQua").click(function(){
 				$("#dialog").dialog(
 					{ buttons: [{
@@ -157,19 +175,21 @@
 	</script>
 </head>
 <body>
-	<h1>The QUA Map</h1>
-	<p>日本温泉マップ</p>
-	<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
+	<div id="wrapper" style="width: 100%; height: 100%;">
+		<h1>The QUA Map</h1>
+		<p>日本温泉マップ</p>
+		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
+		</div>
+		<div>
+			<br />
+			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default'>温泉を登録する</button>
+			<br />
+			<a href='/quas' target='_blank'>Quas</button>
+			<br />
+			<a href='/reviews' target='_blank'>Reviews</button>
+		</div>
+		<%= render 'qua_entry_dialog' %>
+		<%= render 'review_dialog' %>
 	</div>
-	<div>
-		<br />
-		<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default'>温泉を登録する</button>
-		<br />
-		<a href='/quas' target='_blank'>Quas</button>
-		<br />
-		<a href='/reviews' target='_blank'>Reviews</button>
-	</div>
-	<%= render 'qua_entry_dialog' %>
-	<%= render 'review_dialog' %>
 </body>
 </html>
