@@ -10,8 +10,10 @@ RSpec.describe "reviews/edit", :type => :view do
       :cost_score => 1,
       :sight_score => 1,
       :comment => "MyString",
-      :photo_data => "",
-      :photo_title => "MyString"
+      :photo_title => "MyString",
+      :title => "",
+      :nickname => "",
+      :email => ""
     ))
   end
 
@@ -34,9 +36,13 @@ RSpec.describe "reviews/edit", :type => :view do
 
       assert_select "input#review_comment[name=?]", "review[comment]"
 
-      assert_select "input#review_photo_data[name=?]", "review[photo_data]"
-
       assert_select "input#review_photo_title[name=?]", "review[photo_title]"
+
+      assert_select "input#review_title[name=?]", "review[title]"
+
+      assert_select "input#review_nickname[name=?]", "review[nickname]"
+
+      assert_select "input#review_email[name=?]", "review[email]"
     end
   end
 end

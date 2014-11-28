@@ -3,7 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>Name</th>
+      <th>ID</th>
+      <th>名称</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Quality</th>
@@ -16,6 +17,7 @@
   <tbody>
     <% @quas.each do |qua| %>
       <tr>
+        <td><%= qua.id %></td>
         <td><%= qua.name %></td>
         <td><%= qua.latitude %></td>
         <td><%= qua.longitude %></td>
