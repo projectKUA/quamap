@@ -59,6 +59,8 @@
 				$("#review_qua_img").remove();
 				if(qua.image1 !== null){
 					$(".review-top").append('<img id="review_qua_img" src="/quas/' + qua.id + '/show_image">');
+				}else{
+					$(".review-top").append('<%= image_tag('onsen.png', class:'review_qua_img', alt:'No image') %>');
 				}
 				// 泉質
 				replaceItem("#review_qua_quality_item","review_qua_quality_value", "span", qua.quality);
@@ -122,7 +124,7 @@
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
 				$("#review_contents").append('<div class="' + id +'"></div>');
 				// イメージ
-				$(id).append('<img class="review-image" src="./resized_DSC_0339.jpg" />');
+				$(id).append('<img class="review-image" src="onsen.png" />');
 
 				// タイトル
 				$(id).append('<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>');
@@ -205,7 +207,7 @@
         <% @quas.each do |q| %>
 	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>',
 	    '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>', '<%= q.image1_caption %>',
-	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', alt:'No image') : '' %>'] <%= ", " unless q == @quas.last %>
+	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', alt:'No image') : image_tag('onsen.png', class:'img_info_window', alt:'No image') %>'] <%= ", " unless q == @quas.last %>
         <% end %>
     ];
 
@@ -287,7 +289,7 @@
 							// 実行後にwelcome/index.html.erbを再表示する。
 							$("#new_qua").ajaxSubmit(function(data) {
 									var qua = data.qua;
-									var image = qua.image1 == null ? '' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
+									var image = qua.image1 == null ? '<img class="img_info_window" src="/assets/onsen.png">' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
 									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
 										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );

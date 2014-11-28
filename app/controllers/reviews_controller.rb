@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :set_review, only: [:show, :edit, :update, :destroy]
+  before_action :set_review, only: [:show, :edit, :update, :destroy, :show_image]
 
   # GET /reviews
   # GET /reviews.json
@@ -70,7 +70,9 @@ class ReviewsController < ApplicationController
       }
     end
   end
-
+  def show_image
+    send_data @review.photo_data, :type => 'image/jpeg', :disposition => 'inline'
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_review

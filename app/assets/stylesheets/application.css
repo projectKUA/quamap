@@ -23,6 +23,7 @@
 	}
 	.review-top img{
 		max-width: 100%;
+		max-height: 500px;
 		float:right;
 }	}
 .review-content{
@@ -113,5 +114,6 @@ div.info_window{
 }
 img.img_info_window{
 	max-width: 400px;
+	max-height: 220px;
 	float: right;
 }
