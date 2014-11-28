@@ -11,9 +11,11 @@ RSpec.describe "reviews/index", :type => :view do
         :cost_score => 4,
         :sight_score => 5,
         :comment => "Comment",
-        :photo_data => "",
-        :photo_title => "Photo Title"
-      ),
+        :photo_title => "Photo Title",
+        :title => "",
+        :nickname => "",
+        :email => ""
+       ),
       Review.create!(
         :qua => nil,
         :total_score => 1,
@@ -22,9 +24,11 @@ RSpec.describe "reviews/index", :type => :view do
         :cost_score => 4,
         :sight_score => 5,
         :comment => "Comment",
-        :photo_data => "",
-        :photo_title => "Photo Title"
-      )
+        :photo_title => "Photo Title",
+        :title => "",
+        :nickname => "",
+        :email => ""
+       )
     ])
   end
 

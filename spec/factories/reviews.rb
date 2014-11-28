@@ -9,6 +9,9 @@ FactoryGirl.define do
     comment "MyString"
     photo_data ""
     photo_title "MyString"
+    title ""
+    nickname ""
+    email ""
   end
   factory :review2, :class => Review do
     qua nil
@@ -20,6 +23,9 @@ FactoryGirl.define do
     comment "MyString"
     photo_data ""
     photo_title "MyString"
+    title ""
+    nickname ""
+    email ""
   end
   factory :review3, :class => Review do
     qua nil
@@ -31,6 +37,9 @@ FactoryGirl.define do
     comment "MyString"
     photo_data ""
     photo_title "MyString"
+    title ""
+    nickname ""
+    email ""
   end
 
 end

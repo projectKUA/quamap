@@ -60,7 +60,7 @@
 				if(qua.image1 !== null){
 					$(".review-top").append('<img id="review_qua_img" src="/quas/' + qua.id + '/show_image">');
 				}else{
-					$(".review-top").append('<%= image_tag('onsen.png', class:'review_qua_img', alt:'No image') %>');
+					$(".review-top").append('<%= image_tag('onsen.png', id:'review_qua_img', alt:'No image') %>');
 				}
 				// 泉質
 				replaceItem("#review_qua_quality_item","review_qua_quality_value", "span", qua.quality);
@@ -86,7 +86,7 @@
 				// 表示していたレビューを（あれば）消す
 				$("#review_contents").remove();
 				// レビューコンテンツ基底クラスを追加する
-				$(".review_body").append('<div class="review-contents"></div>');
+				$("#review_body_top").append('<div id="review-contents"></div>');
 				reviews.forEach(function(review, index, reviews) {
 					createReviewItem(review);
 				});
@@ -108,13 +108,17 @@
 
 	/** レビューもしくは記事１件をビルドする。 */
 	function createReviewItem(review){
-		// レビューか記事かで記述内容を替える
-		// total_scoreが入っていたらレビューと見なす
-		if(review.total_score !== null){
-			createReviewItemReview(review)
-		}else{
-			createReviewItemContent(review)
-		}
+		(function($){
+			$(function() {
+				// レビューか記事かで記述内容を替える
+				// total_scoreが入っていたらレビューと見なす
+				if(review.total_score !== null){
+					createReviewItemReview(review);
+				}else{
+					createReviewItemContent(review);
+				}
+			});
+		})(jQuery);
 	}
 	/** レビュー１件をビルドする。 */
 	function createReviewItemReview(review){
@@ -128,7 +132,6 @@
 
 				// タイトル
 				$(id).append('<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>');
-
 
 				// 名前
 
