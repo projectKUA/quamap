@@ -3,15 +3,19 @@
 <table>
   <thead>
     <tr>
-      <th>Qua</th>
-      <th>Total score</th>
-      <th>Quality score</th>
-      <th>Convinience score</th>
-      <th>Cost score</th>
-      <th>Sight score</th>
-      <th>Comment</th>
-      <th>Photo data</th>
-      <th>Photo title</th>
+      <th>タイトル</th>
+      <th>ユーザー名</th>
+      <th>メールアドレス</th>
+      <th>評価した温泉</th>
+      <th>温泉ID</th>
+      <th>総合評価</th>
+      <th>泉質</th>
+      <th>便利さ</th>
+      <th>価格</th>
+      <th>景観</th>
+      <th>コメント</th>
+      <!--<th>写真データ</th>-->
+      <th>写真タイトル</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,14 +23,17 @@
   <tbody>
     <% @reviews.each do |review| %>
       <tr>
+        <td><%= review.title %></td>
+        <td><%= review.nickname %></td>
+        <td><%= review.email %></td>
         <td><%= review.qua != nil ? review.qua.name : "" %></td>
+        <td><%= review.qua != nil ? review.qua.id : "" %></td>
         <td><%= review.total_score %></td>
         <td><%= review.quality_score %></td>
         <td><%= review.convinience_score %></td>
         <td><%= review.cost_score %></td>
         <td><%= review.sight_score %></td>
         <td><%= review.comment %></td>
-        <td><%= review.photo_data %></td>
         <td><%= review.photo_title %></td>
         <td><%= link_to 'Show', review %></td>
         <td><%= link_to 'Edit', edit_review_path(review) %></td>

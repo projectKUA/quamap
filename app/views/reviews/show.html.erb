@@ -1,6 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>タイトル</strong>
+  <%= @review.title %>
+</p>
+
+<p>
+  <strong>ユーザー名</strong>
+  <%= @review.nickname %>
+</p>
+
+<p>
+  <strong>メールアドレス</strong>
+  <%= @review.email %>
+</p>
+
+<p>
   <strong>Qua:</strong>
   <%= @review.qua %>
 </p>
@@ -37,7 +52,6 @@
 
 <p>
   <strong>Photo data:</strong>
-  <%= @review.photo_data %>
 </p>
 
 <p>

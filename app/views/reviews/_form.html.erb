@@ -12,7 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :qua_id %><br>
+    <%= f.label "タイトル" %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label "ユーザー名" %><br>
+    <%= f.text_field :nickname %>
+  </div>
+  <div class="field">
+    <%= f.label "メールアドレス" %><br>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label "Qua_id" %><br>
     <%= f.text_field :qua_id %>
   </div>
   <div class="field">
@@ -41,7 +53,7 @@
   </div>
   <div class="field">
     <%= f.label :photo_data %><br>
-    <%= f.text_field :photo_data %>
+    <%= f.file_field :photo_data, accept: "image/jpeg" %>
   </div>
   <div class="field">
     <%= f.label :photo_title %><br>

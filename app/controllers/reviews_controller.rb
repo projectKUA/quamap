@@ -24,8 +24,7 @@ class ReviewsController < ApplicationController
   # POST /reviews
   # POST /reviews.json
   def create
-    @review = Review.new(review_params)
-
+    @review = createWithImage(review_params)
     respond_to do |format|
       if @review.save
         format.html { redirect_to @review, notice: 'Review was successfully created.' }
@@ -41,7 +40,9 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1.json
   def update
     respond_to do |format|
-      if @review.update(review_params)
+      review = createWithImage(review_params).attributes
+      review["id"] = params[:id]
+      if @review.update(review)
         format.html { redirect_to @review, notice: 'Review was successfully updated.' }
         format.json { render :show, status: :ok, location: @review }
       else
@@ -78,6 +79,26 @@ class ReviewsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def review_params
-      params.require(:review).permit(:qua_id, :total_score, :quality_score, :convinience_score, :cost_score, :sight_score, :comment, :photo_data, :photo_title)
+      params.require(:review).permit(:qua_id, :total_score, :quality_score, :convinience_score, :cost_score, :sight_score, :comment, :photo_data, :photo_title, :title, :nickname, :email)
     end
+    def createWithImage(review_params)
+      upload_file = review_params[:photo_data]
+      review = {}
+      review[:title] = review_params[:title]
+      review[:nickname] = review_params[:nickname]
+      review[:email] = review_params[:email]
+      review[:qua_id] = review_params[:qua_id]
+      review[:total_score] = review_params[:total_score]
+      review[:quality_score] = review_params[:quality_score]
+      review[:convinience_score] = review_params[:convinience_score]
+      review[:cost_score] = review_params[:cost_score]
+      review[:sight_score] = review_params[:sight_score]
+      review[:comment] = review_params[:comment]
+      review[:photo_title] = review_params[:photo_title]
+      if upload_file != nil && upload_file != ''
+         review[:photo_data] = upload_file.read
+      end
+      Review.new(review)
+    end
+
 end
