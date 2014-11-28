@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :reviews
+  resources :reviews do
+    collection do
+      get 'list_by_qua'
+    end
+  end
 
   resources :quas do
     member do

@@ -60,6 +60,15 @@ class ReviewsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  def list_by_qua
+    @qua = Qua.find(params[:qua_id])
+    @reviews = Review.where(qua_id: params[:qua_id])
+    respond_to do |format|
+      format.json {
+        render json: { :reviews => @reviews, :quas => @qua }
+      }
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

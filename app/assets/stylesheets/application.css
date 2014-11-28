@@ -17,9 +17,14 @@
 	width:70%;
 	float:left;
 }
-	.review-top img{
-		width:100%;
+	.review-top h2{
+		font-weight: bold;
+		margin: 0px 10px 10px 0px;
 	}
+	.review-top img{
+		max-width: 100%;
+		float:right;
+}	}
 .review-content{
 	width:70%;
 	float:left;
@@ -107,5 +112,6 @@ div.info_window{
 	margin-right: 10px;
 }
 img.img_info_window{
+	max-width: 400px;
 	float: right;
 }
