@@ -5,7 +5,7 @@ var styles = [
     elementType: "all",
     stylers: [
       { visibility: "on" },
-      { hue: "#00ffee" },
+      { hue: "#0044ff" },
       { saturation: 39 },
       { lightness: 30 }
     ]

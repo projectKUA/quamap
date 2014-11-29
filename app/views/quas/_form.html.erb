@@ -12,47 +12,47 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :name, "名前" %><br>
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :latitude %><br>
+    <%= f.label :latitude, "緯度" %><br>
     <%= f.text_field :latitude %>
   </div>
   <div class="field">
-    <%= f.label :longitude %><br>
+    <%= f.label :longitude, "経度" %><br>
     <%= f.text_field :longitude %>
   </div>
   <div class="field">
-    <%= f.label :quality %><br>
+    <%= f.label :quality, "泉質" %><br>
     <%= f.text_field :quality %>
   </div>
   <div class="field">
-    <%= f.label :effect %><br>
+    <%= f.label :effect, "効能" %><br>
     <%= f.text_field :effect %>
   </div>
   <div class="field">
-    <%= f.label :url %><br>
+    <%= f.label :url, "URL" %><br>
     <%= f.text_field :url %>
   </div>
   <div class="field">
-    <%= f.label :stay_required %><br>
-    <%= f.radio_button :stay_required, "0" %>not required
-    <%= f.radio_button :stay_required, "1" %>required
+    <%= f.label :stay_required, "宿泊の要否" %><br>
+    <%= f.radio_button :stay_required, "0" %>不要
+    <%= f.radio_button :stay_required, "1" %>必要
   </div>
   <div class="field">
-    <%= f.label :price %><br>
+    <%= f.label :price, "値段" %><br>
     <%= f.text_field :price %>
   </div>
   <div class="field">
-    <%= f.label :image1_caption %><br>
+    <%= f.label :image1_caption, "画像タイトル" %><br>
     <%= f.text_field :image1_caption %>
   </div>
   <div class="field">
-    <%= f.label :image1 %><br>
+    <%= f.label :image1, "画像" %><br>
     <%= f.file_field :image1, accept: "image/jpeg" %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "登録する", :class => "btn btn-sm btn-default" %>
   </div>
 <% end %>
