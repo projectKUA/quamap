@@ -86,7 +86,7 @@
 				// 表示していたレビューを（あれば）消す
 				$("#review_contents").remove();
 				// レビューコンテンツ基底クラスを追加する
-				$("#review_body_top").append('<div id="review-contents"></div>');
+				$("#review_body_top").after("<div id='review_contents'> </div>");
 				reviews.forEach(function(review, index, reviews) {
 					createReviewItem(review);
 				});
@@ -126,14 +126,14 @@
 			$(function() {
 				var id = 'review_content_' + review.id;
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
-				$("#review_contents").append('<div class="' + id +'"></div>');
-				// イメージ
-				$(id).append('<img class="review-image" src="onsen.png" />');
+				$("#review_contents").append('<div id="' + id +'"></div>').append(
+					// イメージ
+					'<img class="review-image" src="./resized_DSC_0339.jpg" />').append(
+					// タイトル
+					'<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>').append(
+					// 名前
+					'<div id="review_title_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>');
 
-				// タイトル
-				$(id).append('<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>');
-
-				// 名前
 
 
 				// 投稿日時
@@ -162,14 +162,13 @@
 			$(function() {
 				var id = 'review_content_' + review.id;
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
-				$("#review_contents").append('<div class="' + id +'"></div>');
-				// イメージ
-				$(id).append('<img class="review-image" src="./resized_DSC_0339.jpg" />');
-
-
-				// タイトル
-
-				// 名前
+				$("#review_contents").append('<div id="' + id +'"></div>').append(
+					// イメージ
+					'<img class="review-image" src="./resized_DSC_0339.jpg" />').append(
+					// タイトル
+					'<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>').append(
+					// 名前
+					'<div id="review_title_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>');
 
 				// 投稿日時
 
@@ -186,9 +185,9 @@
     	  '<div id="content_qua_' + id + '" class="info_window">'+
     	  '<div id="siteNotice"></div>' +
     	   image +
-    	  '<div class="firstheading"><h1 id="firstHeading" style="white-space: nowrap;">' + name + '</h1></div>'+
+    	  '<div class="firstheading"><h1 id="firstHeading">' + name + '</h1></div>'+
     	  '<div style="clear: both;"></div>' +
-    	  '<div id="bodyContent" class="width: 100%; clear: both;">'+
+    	  '<div id="bodyContent" class="min-width:450px; width: 100%; clear: both;">'+
     	  '<p style="white-space: nowrap;"><b>泉質:</b>' + quality + '</p>'+
     	  '<p><b>効能:</b>' + effect + '</p>'+
     	  '<p><b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</p>'+
