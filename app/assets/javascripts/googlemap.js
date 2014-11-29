@@ -16,7 +16,7 @@ var styles = [
       { visibility: "on" },
       { hue: "#00ff99" },
       { lightness: 53 },
-      { saturation: 21 }
+      { saturation: -60 }
     ]
   },{
     featureType: "road",
