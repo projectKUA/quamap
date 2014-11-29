@@ -258,7 +258,7 @@
 
 				// Create a new StyledMapType object, passing it the array of styles,
 				// as well as the name to be displayed on the map type control.
-				var styledMap = new google.maps.StyledMapType(styles,
+				var styledMap = new google.maps.StyledMapType(styles[0],
 					{name: "Styled Map"});
 				//Associate the styled map with the MapTypeId and set it to display.
 				mapObj.mapTypes.set('map_style', styledMap);
