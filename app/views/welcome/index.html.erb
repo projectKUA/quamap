@@ -82,11 +82,11 @@
 
 				// レビュー記事を作成する
 				// 件数を出したり、「ありません」とか出したりしたい
-				replaceItem(".review_body","review_body_top", "h3", qua.name + "の記事一覧"  );
+				replaceItem(".top-end","review_body_top", "h3", qua.name + "の記事一覧"  );
 				// 表示していたレビューを（あれば）消す
 				$("#review_contents").remove();
 				// レビューコンテンツ基底クラスを追加する
-				$("#review_body_top").after("<div id='review_contents'> </div>");
+				$(".review_body").append("<div id='review_contents'> </div>");
 				reviews.forEach(function(review, index, reviews) {
 					createReviewItem(review);
 				});
@@ -124,35 +124,70 @@
 	function createReviewItemReview(review){
 		(function($){
 			$(function() {
-				var id = 'review_content_' + review.id;
+				var id = 'review_content_' + review.qua_id + '_' + review.id;
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
-				$("#review_contents").append('<div id="' + id +'"></div>').append(
+				var content =  $('<div id="' + id +'" class="review-content"></div>');
+				// $("#review_contents").append('<div id="' + id +'" class="review-content"></div>').append(
+					$("#review_contents").append(content);
+					// 基底タグにコンテンツを追加する
+					content.append(
 					// イメージ
-					'<img class="review-image" src="./resized_DSC_0339.jpg" />').append(
+					// if(review.photodata !== null){	// イメージがあるかどうかで分岐させる
+					'<div id="review_title_' + review.qua_id + '_' + review.id + '"><img class="review_image" src="/reviews/' + review.id + '/show_image"/></div>' +
 					// タイトル
-					'<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>').append(
+					'<h4>' + review.title + '</h4>').append(
 					// 名前
-					'<div id="review_title_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>');
+					'<div id="review_nickname_' + review.qua_id + '_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>').append(
+					// 投稿日時
+					// '<div id="review_title_' + review.id + '"><span>' + review.updated_at + '</span></div>');
 
-
-
-				// 投稿日時
-
-
-				// 総合評価
-
-
-				// 泉質
-
-
-				// 行きやすさ・使いやすさ
-
-				// 価格
-
-				// 景観 / その他
-
-				// コメント
-
+					// --ここからレビュー
+					// 総合評価
+					'<div id="score_' + review.qua_id + '_' + review.id + '">' +
+					'<span>総合評価：</span><div id="review_total_' + review.qua_id + '_' + review.id + '"></div>').append(
+					// 泉質
+					'<span>泉質：</span><div id="review_quality_' + review.qua_id + '_' + review.id + '"></div>').append(
+					// 行きやすさ・使いやすさ：
+					'<span>行きやすさ・使いやすさ：</span><div id="review_convinience_' + review.qua_id + '_' + review.id + '"></div>').append(
+					// 価格：
+					'<span>総合評価：</span><div id="review_cost_' + review.qua_id + '_' + review.id + '"></div>').append(
+					// 景観 / その他：
+					'<span>総合評価：</span><div id="review_sight_' + review.qua_id + '_' + review.id + '"></div></div>').append(
+					// --ここまでレビュー
+					// コメント
+					'<div id=”comment_' + review.qua_id + '_' + review.id +'"><span>コメント：</span><br />' + review.comment + '</div>').append(
+					'<div class="review-sep"><hr /></div>');
+				// raty実行
+				$("#review_total_" + review.qua_id + '_' + review.id).raty({
+					readOnly: true,
+					score: review.total_score,
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
+				$("#review_quality_" + review.qua_id + '_' + review.id).raty({
+					readOnly: true,
+					score: review.quality_score,
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
+				$("#review_convinience_" + review.qua_id + '_' + review.id).raty({
+					readOnly: true,
+					score: review.convinience_score,
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
+				$("#review_cost_" + review.qua_id + '_' + review.id).raty({
+					readOnly: true,
+					score: review.cost_score,
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
+				$("#review_sight_" + review.qua_id + '_' + review.id).raty({
+					readOnly: true,
+					score: review.sight_score,
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
 			});
 		})(jQuery);
 	}
@@ -160,20 +195,25 @@
 	function createReviewItemContent(review){
 		(function($){
 			$(function() {
-				var id = 'review_content_' + review.id;
+				var id = 'review_content_' + review.qua_id + '_' + review.id;
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
-				$("#review_contents").append('<div id="' + id +'"></div>').append(
+				var content =  $('<div id="' + id +'" class="review-content"></div>');
+				// $("#review_contents").append('<div id="' + id +'" class="review-content"></div>').append(
+					$("#review_contents").append(content);
+					// 基底タグにコンテンツを追加する
+					content.append(
 					// イメージ
-					'<img class="review-image" src="./resized_DSC_0339.jpg" />').append(
+					// if(review.photodata !== null){	// イメージがあるかどうかで分岐させる
+					'<div id="review_title_' + review.qua_id + '_' + review.id + '"><img class="review_image" src="/reviews/' + review.id + '/show_image"/></div>' +
 					// タイトル
-					'<div id="review_title_' + review.id + '"><h4>' + review.title + '</h4></div>').append(
+					'<h4>' + review.title + '</h4>').append(
 					// 名前
-					'<div id="review_title_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>');
-
-				// 投稿日時
-
-				// コメント
-
+					'<div id="review_title_' + review.qua_id + '_' + review.id + '"><span>名前：<a href="mailto:' + review.email +'">' + review.nickname + '</a></span></div>').append(
+					// 投稿日時
+					// '<div id="review_title_' + review.id + '"><span>投稿日時：' + review.updated_at + '</span></div>').append(
+					// コメント
+					'<div id=”comment_' + review.qua_id + '_' + review.id +'"><span>コメント：</span><br />' + review.comment + '</div>').append(
+					'<div class="review-sep"><hr /></div>');
 			});
 		})(jQuery);
 	}
@@ -258,7 +298,7 @@
 
 				// Create a new StyledMapType object, passing it the array of styles,
 				// as well as the name to be displayed on the map type control.
-				var styledMap = new google.maps.StyledMapType(styles[0],
+				var styledMap = new google.maps.StyledMapType(styles,
 					{name: "Styled Map"});
 				//Associate the styled map with the MapTypeId and set it to display.
 				mapObj.mapTypes.set('map_style', styledMap);
