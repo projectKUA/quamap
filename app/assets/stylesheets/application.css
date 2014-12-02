@@ -106,18 +106,26 @@
 div.info_window{
 	min-width:400px;
 	max-width:650px;
+        margin:5px;
+        overflow: hidden;
 }
 .firstheading{
-	float: left;
 	vertical-align: top;
 }
 .firstheading h1{
-	margin-top: 10px;
-	margin-right: 10px;
+        float: left;
+        margin: 10px 10px 10px 0px;
 	width:200px;
 }
 img.img_info_window{
 	max-width: 400px;
 	max-height: 220px;
-	float: right;
+        /* float: right; */ 
+        /* margin-right: -220px;*/
+}
+.gm-style-iw {
+    /* overflow: hidden ! important; */
+}
+.gm-style-iw div {
+    /* overflow: hidden ! important; */
 }
