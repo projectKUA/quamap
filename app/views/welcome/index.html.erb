@@ -236,7 +236,8 @@
         }else{
            ret += '<dd><b>No Website</b></a></dd>';
 		}
-		ret += '<dd><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></dd>'
+		//ret += '<dd><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></dd>'
+		ret += '<dd><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></dd>';
 		ret += '</dl></div>'
     	return ret;
     }
