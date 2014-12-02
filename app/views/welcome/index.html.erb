@@ -181,27 +181,23 @@
 	// google map object
 	var mapObj;
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
-    	var ret =
-    	  '<div id="content_qua_' + id + '" class="info_window">'+
-    	  '<div id="siteNotice"></div>' +
-    	   image +
-    	  '<div class="firstheading"><h1 id="firstHeading">' + name + '</h1></div>'+
-    	  '<div style="clear: both;"></div>' +
-    	  '<div id="bodyContent" class="min-width:450px; width: 100%; clear: both;">'+
-    	  '<p style="white-space: nowrap;"><b>泉質:</b>' + quality + '</p>'+
-    	  '<p><b>効能:</b>' + effect + '</p>'+
-    	  '<p><b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</p>'+
-    	  '<p><b>料金:</b>' + (price === "" ? "不明" : price + "円" ) + '</p>';
-				if(url !== ''){
-					ret += '<p style="white-space: nowrap;"><a href="' + url + '" target="_brank"><b>Website</b></a></p>';
-				}else{
-					ret += '<p style="white-space: nowrap;"><b>No Website</b></a></p>';
-				}
-				ret += '</div>';	// end of 'bodyContent'
-				// ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></div>';
-				ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
-				ret += '</div>';	// end of 'content_qua_xxx'
-    	  '</div></div>';
+    	var ret = 
+    	  '<div style="overflow:hidden;"><div id="content_qua_' + id + '" class="firstheading">' +
+    	  '<dl><dd>' + '<h1>' + name + '</h1>' + image + '</dd></dl>' + 
+    	  '</div></div>' +
+    	  '<div>' +
+     	  '<dl>' +
+          '<dd>' + '<b>泉質:</b>' + quality + '</dd>' +
+          '<dd>' + '<b>効能:</b>' + effect + '</dd>' +
+          '<dd>' + '<b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</dd>' +
+          '<dd>' + '<b>料金:</b>' + (price === "" ? "不明" : price + "円" ) + '</dd>'
+        if(url !== ''){
+           ret += '<dd><a href="' + url + '" target="_brank"><b>Website</b></a></dd>';
+        }else{
+           ret += '<dd><b>No Website</b></a></dd>';
+		}
+		ret += '<dd><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></dd>'
+		ret += '</dl></div>'
     	return ret;
     }
 	// 温泉情報　名称,緯度,経度,泉質,効能
@@ -209,7 +205,7 @@
         <% @quas.each do |q| %>
 	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>',
 	    '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>', '<%= q.image1_caption %>',
-	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', alt:'No image') : image_tag('onsen.png', class:'img_info_window', alt:'No image') %>'] <%= ", " unless q == @quas.last %>
+	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', align:'right') : image_tag('onsen.png', class:'img_info_window', align:'right') %>'] <%= ", " unless q == @quas.last %>
         <% end %>
     ];
 
@@ -291,7 +287,7 @@
 							// 実行後にwelcome/index.html.erbを再表示する。
 							$("#new_qua").ajaxSubmit(function(data) {
 									var qua = data.qua;
-									var image = qua.image1 == null ? '<img class="img_info_window" src="/assets/onsen.png">' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
+									var image = qua.image1 == null ? '<img class="img_info_window" src="/assets/onsen.png" align="right">' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image" align="right">'
 									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
 										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
 									$("#dialog").dialog( "close" );
