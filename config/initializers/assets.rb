@@ -9,3 +9,4 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( googlemap.js )
 Rails.application.config.assets.precompile += %w( jquery.popupoverlay.js )
 Rails.application.config.assets.precompile += %w( jquery.raty.js )
+Rails.application.config.assets.precompile += %w( bootstrap.js )
