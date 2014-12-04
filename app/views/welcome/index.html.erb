@@ -351,6 +351,11 @@
 		<p>日本温泉マップ</p>
 		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
 		</div>
+                <input id="inc_search" type="text">
+
+                <div id='qua_list'>
+                   <%= render partial: 'qua_list', locals: { quas: @users} %>
+                </div>
 		<div>
 			<br />
 			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default'>温泉を登録する</button>
