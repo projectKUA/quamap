@@ -6,10 +6,11 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 	<script src="http://malsup.github.com/jquery.form.js"></script>
-	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//getbootstrap.com/dist/css/bootstrap.min.css" />
 	<%= javascript_include_tag "jquery.popupoverlay" %>
 	<%= javascript_include_tag "jquery.raty" %>
 	<%= javascript_include_tag "googlemap" %>
+	<%= javascript_include_tag "bootstrap" %>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 	<style>
 	div.window_comment, span.window_comment{
@@ -20,11 +21,12 @@
 	div #review_dialog{
 		overflow: scroll;
 		width: 70%;
-		height: 75%;
 		transition: all 0.3s;
+		margin: 20px 0px 0px 0px;
 	}
 	</style>
 	<script type="text/javascript">
+	/** 「レビューを見る」クリック時の挙動 */
 	function reviewLinkClicked(link){
 		(function($){
 			$(function() {
@@ -46,22 +48,48 @@
 	function createReviewDialog(qua, reviews){
 		(function($){
 			$(function() {
+				createReviewDialogTop(qua);
+				createReviewDialogQuaInfo(qua);
 
+				// レビュー記事を作成する
+				// 件数を出したり、「ありません」とか出したりしたい
+				replaceItem(".top-end","review_body_top", "h3", qua.name + "の記事一覧"  );
+				// 表示していたレビューを（あれば）消す
+				$("#review_contents").remove();
+				$("#container").remove();
+				// 「書き込む」ボタンを表示していたら消す
+				$("#btn_enter_review").remove();
+				// レビューコンテンツ基底クラスを追加する
+				$(".review_body").append("<div id='review_contents'> </div>");
+				reviews.forEach(function(review, index, reviews) {
+					createReviewItem(review);
+				});
+
+			});
+		})(jQuery);
+	}
+	function createReviewDialogTop(qua){
+		(function($){
+			$(function() {
 				// 画面タイトル
-				// replaceItem(".review-top","review_qua_title", "h2", qua.name);
 				$("#review_qua_title").remove();
 				if(qua.name !== null){
 					$(".review-top").append('<h2 id="review_qua_title">' + qua.name + '</h2>');
 				}
-
 				// トップ画像
-				// replaceImgItem(".review-top", "review_qua_img", ("/quas/" + qua.id + "/show_image") );
 				$("#review_qua_img").remove();
 				if(qua.image1 !== null){
 					$(".review-top").append('<img id="review_qua_img" src="/quas/' + qua.id + '/show_image">');
 				}else{
 					$(".review-top").append('<%= image_tag('onsen.png', id:'review_qua_img', alt:'No image') %>');
 				}
+			});
+		})(jQuery);
+	}
+
+	function createReviewDialogQuaInfo(qua){
+		(function($){
+			$(function() {
 				// 泉質
 				replaceItem("#review_qua_quality_item","review_qua_quality_value", "span", qua.quality);
 
@@ -79,21 +107,11 @@
 
 				// 平均評価
 				// reviewsの総合評価の平均値を求め、評価として表示する
-
-				// レビュー記事を作成する
-				// 件数を出したり、「ありません」とか出したりしたい
-				replaceItem(".top-end","review_body_top", "h3", qua.name + "の記事一覧"  );
-				// 表示していたレビューを（あれば）消す
-				$("#review_contents").remove();
-				// レビューコンテンツ基底クラスを追加する
-				$(".review_body").append("<div id='review_contents'> </div>");
-				reviews.forEach(function(review, index, reviews) {
-					createReviewItem(review);
-				});
-
 			});
 		})(jQuery);
 	}
+
+
 	/** 文字列コンテンツを配下に持つ要素タグを挿入する。*/
 	function replaceItem(parent, element, tag, item){
 		(function($){
@@ -150,44 +168,19 @@
 					// 行きやすさ・使いやすさ：
 					'<span>行きやすさ・使いやすさ：</span><div id="review_convinience_' + review.qua_id + '_' + review.id + '"></div>').append(
 					// 価格：
-					'<span>総合評価：</span><div id="review_cost_' + review.qua_id + '_' + review.id + '"></div>').append(
+					'<span>価格：</span><div id="review_cost_' + review.qua_id + '_' + review.id + '"></div>').append(
 					// 景観 / その他：
-					'<span>総合評価：</span><div id="review_sight_' + review.qua_id + '_' + review.id + '"></div></div>').append(
+					'<span>景観 / その他：</span><div id="review_sight_' + review.qua_id + '_' + review.id + '"></div></div>').append(
 					// --ここまでレビュー
 					// コメント
 					'<div id=”comment_' + review.qua_id + '_' + review.id +'"><span>コメント：</span><br />' + review.comment + '</div>').append(
 					'<div class="review-sep"><hr /></div>');
 				// raty実行
-				$("#review_total_" + review.qua_id + '_' + review.id).raty({
-					readOnly: true,
-					score: review.total_score,
-					starOff  : '/assets/star-off.png',
-					starOn   : '/assets/star-on.png'
-				});
-				$("#review_quality_" + review.qua_id + '_' + review.id).raty({
-					readOnly: true,
-					score: review.quality_score,
-					starOff  : '/assets/star-off.png',
-					starOn   : '/assets/star-on.png'
-				});
-				$("#review_convinience_" + review.qua_id + '_' + review.id).raty({
-					readOnly: true,
-					score: review.convinience_score,
-					starOff  : '/assets/star-off.png',
-					starOn   : '/assets/star-on.png'
-				});
-				$("#review_cost_" + review.qua_id + '_' + review.id).raty({
-					readOnly: true,
-					score: review.cost_score,
-					starOff  : '/assets/star-off.png',
-					starOn   : '/assets/star-on.png'
-				});
-				$("#review_sight_" + review.qua_id + '_' + review.id).raty({
-					readOnly: true,
-					score: review.sight_score,
-					starOff  : '/assets/star-off.png',
-					starOn   : '/assets/star-on.png'
-				});
+				execRaty("#review_total_" + review.qua_id + '_' + review.id, review.total_score);
+				execRaty("#review_quality_" + review.qua_id + '_' + review.id, review.quality_score);
+				execRaty("#review_convinience_" + review.qua_id + '_' + review.id, review.convinience_score);
+				execRaty("#review_cost_" + review.qua_id + '_' + review.id, review.cost_score);
+				execRaty("#review_sight_" + review.qua_id + '_' + review.id, review.sight_score);
 			});
 		})(jQuery);
 	}
@@ -217,6 +210,227 @@
 			});
 		})(jQuery);
 	}
+	/** 「レビューを書く」クリック時の挙動 */
+	function reviewEntryLinkClicked(link){
+		(function($){
+			$(function() {
+				var qua_id = $(link).attr("id").substr(18);	// link.id = "link_enter_review_xxx", and qua_id = xxx.
+				$.ajax({
+					url: "reviews/new_ajax",
+					type: 'get',
+					data: "qua_id=" + qua_id,
+					dataType: "json",
+					success: function(data) {
+						var qua = data.quas;			// 温泉 自分自身が1件入っている
+						createReviewEntryDialog(qua);
+					}
+				});
+			});
+		})(jQuery);
+	}
+	/** 「レビューを書く」ダイアログを生成する */
+	function createReviewEntryDialog(qua){
+		(function($){
+			$(function() {
+				<% @review = Review.new %>
+				// タイトル・トップ画像を消す
+				$("#review_qua_title").remove();
+				$("#review_qua_img").remove();
+
+				// 表示していたレビュー/登録フォームを（あれば）消す
+				$("#review_body_top").remove();
+				$("#review_contents").remove();
+				$("#container").remove();
+				// レビュー基底クラスを追加する
+				$(".review-top").append("<div id='container'> </div>");
+				// $(".review_body").append("<div id='container'> </div>");
+
+				// tab navigation(with bootstrap.js)
+				$("#container").append(
+					'<ul class="nav nav-tabs">' +
+						'<li class="active"><a href="#tab1" data-toggle="tab">記事を書く</a></li>' +
+						'<li><a href="#tab2" data-toggle="tab">評価する</a></li></ul>'
+				);
+				$("#container").append(
+						'<div id="myTabContent" class="tab-content"> </div>'
+				);
+				// tab1 記事タブ
+				$("#myTabContent").append(
+						'<div class="tab-pane fade in active" id="tab1">' +
+							'<h3>' + qua.name + 'の記事を書く</h3>' +
+							( qua.image1 !== null ?
+								'<img id="review_qua_img" class="img_review_entry" src="/quas/' + qua.id + '/show_image">'
+								: '<%= image_tag('onsen.png', id:'review_qua_img',  class:'img_review_entry', alt:'No image') %>'
+							) +
+							'<%= form_for(@review, :url => {:action => 'create_ajax', :controller => 'reviews'}, :remote => true) do |f| %>' +
+								'<hr />' +
+								'<%= hidden_field_tag :authenticity_token, form_authenticity_token %>' +
+								'<input id="review_qua_id" name="review[qua_id]" type="hidden" value="' + qua.id +'">' +
+								'<div class="field">' +
+									'<%= f.label :title, "タイトル:" %>' +
+									'<%= f.text_field :title %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :nickname, "ユーザー名:" %>' +
+									'<%= f.text_field :nickname %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :email, "メールアドレス:" %>' +
+									'<%= f.text_field :email %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :comment, "コメント:" %>' +
+									'<textarea id="review_comment" name="review[comment]">' +
+									'</textarea>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :photo_data, "画像:" %>' +
+									'<%= f.file_field :photo_data, accept: "image/jpeg" %>' +
+								'</div>' +
+							'<% end %>' +
+						'</div>'
+				);
+				// tab2 評価タブ
+				$("#myTabContent").append(
+						'<div class="tab-pane fade" id="tab2">' +
+							'<h3>' + qua.name + 'を評価する</h3>' +
+							( qua.image1 !== null ?
+								'<img id="review_qua_img" class="img_review_entry" src="/quas/' + qua.id + '/show_image">'
+								: '<%= image_tag('onsen.png', id:'review_qua_img',  class:'img_review_entry', alt:'No image') %>'
+							) +
+							'<%= form_for(@review, :url => {:action => 'create_ajax', :controller => 'reviews'}, :remote => true) do |f| %>' +
+								'<hr />' +
+								'<%= hidden_field_tag :authenticity_token, form_authenticity_token %>' +
+								'<input id="review_qua_id" name="review[qua_id]" type="hidden" value="' + qua.id +'">' +
+								'<div class="field">' +
+									'<%= f.label :title, "タイトル:" %>' +
+									'<%= f.text_field :title %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :nickname, "ユーザー名:" %>' +
+									'<%= f.text_field :nickname %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :email, "メールアドレス:" %>' +
+									'<%= f.text_field :email %>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :comment, "コメント:" %>' +
+									'<textarea id="review_comment" name="review[comment]">' +
+									'</textarea>' +
+								'</div>' +
+								'<div class="clear"><hr /></div>' +
+								'<div class="field">' +
+									'<%= f.label :total_score, "総合評価:" %>' +
+									'<select id="review_total_score" name="review[total_score]" class="review_select"><option value="5">最高</option>' +
+									'<option value="4">良い</option>' +
+									'<option value="3" selected>標準</option>' +
+									'<option value="2">もう少し</option>' +
+									'<option value="1">不満</option></select>' +
+									'<div id="review_total_score_raty" class="review_raty"></div>' +
+									'<div class="clear"></div>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :quality_score, "泉質:" %>' +
+									'<select id="review_quality_score" name="review[quality_score]" class="review_select"><option value="5">最高</option>' +
+									'<option value="4">良い</option>' +
+									'<option value="3" selected>標準</option>' +
+									'<option value="2">もう少し</option>' +
+									'<option value="1">不満</option></select>' +
+									'<div id="review_quality_score_raty" class="review_raty"></div>' +
+									'<div class="clear"></div>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :convinience_score, "行きやすさ・使いやすさ:" %>' +
+									'<select id="review_convinience_score" name="review[convinience_score]" class="review_select"><option value="5">最高</option>' +
+									'<option value="4">良い</option>' +
+									'<option value="3" selected>標準</option>' +
+									'<option value="2">もう少し</option>' +
+									'<option value="1">不満</option></select>' +
+									'<div id="review_convinience_score_raty" class="review_raty"></div>' +
+									'<div class="clear"></div>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :cost_score, "価格:" %>' +
+									'<select id="review_cost_score" name="review[cost_score]" class="review_select"><option value="5">最高</option>' +
+									'<option value="4">良い</option>' +
+									'<option value="3" selected>標準</option>' +
+									'<option value="2">もう少し</option>' +
+									'<option value="1">不満</option></select>' +
+									'<div id="review_cost_score_raty" class="review_raty"></div>' +
+									'<div class="clear"></div>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :sight_score, "景観 ／ その他:" %>' +
+									'<select id="review_sight_score" name="review[sight_score]" class="review_select"><option value="5">最高</option>' +
+									'<option value="4">良い</option>' +
+									'<option value="3" selected>標準</option>' +
+									'<option value="2">もう少し</option>' +
+									'<option value="1">不満</option></select>' +
+									'<div id="review_sight_score_raty" class="review_raty"></div>' +
+									'<div class="clear"></div>' +
+								'</div>' +
+								'<div class="field">' +
+									'<%= f.label :photo_data, "画像:" %>' +
+									'<%= f.file_field :photo_data, accept: "image/jpeg" %>' +
+								'</div>' +
+							'<% end %>' +
+						'</div>'
+				);
+				$("#btn_enter_review").remove();
+				$("#btn_close_review").before(
+					'<button id="btn_enter_review" class="btn btn-default">書き込む</button>'
+				);
+				createReviewDialogQuaInfo(qua);
+				// ratyを初期化する
+				$(".review_select").each(function (index, elem) {
+					execRaty( "#" + elem.id + "_raty", 3);
+				});
+				// select操作時にratyを動かす
+				$(".review_select").change(function(e){
+					execRaty("#" + this.id + "_raty", e.target.value);
+				})
+				$("#btn_enter_review").click(function(e){
+					var t = $(".tab-pane.in.active");
+
+					if(t.attr("id") === "tab1"){
+						var nr = $("#new_review");
+						$("#new_review").ajaxSubmit(function(data) {
+							// 「レビューを見る」を表示
+							$('#link_show_review_' + qua.id ).click();
+						});
+						// いったん自分を閉じる
+						$("#btn_close_review").click();
+
+					}else{
+						var nr = $("#new_review");
+						$("#new_review").ajaxSubmit(function(data) {
+							// 「レビューを見る」を表示
+							$('#link_show_review_' + qua.id ).click();
+						});
+						// いったん自分を閉じる
+						$("#btn_close_review").click();
+
+					}
+				});
+			});
+		})(jQuery);
+	}
+
+  function execRaty(elem, value){
+		(function($){
+			$(function() {
+				$(elem).raty({
+					readOnly: true,
+					score: value,
+					starHalf  : '/assets/star-half.png',
+					starOff  : '/assets/star-off.png',
+					starOn   : '/assets/star-on.png'
+				});
+			});
+		})(jQuery);
+
+  }
 
 	// google map object
 	var mapObj;
@@ -238,8 +452,8 @@
 					ret += '<p style="white-space: nowrap;"><b>No Website</b></a></p>';
 				}
 				ret += '</div>';	// end of 'bodyContent'
-				// ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open">レビューを見る</button></div>';
-				ret += '<div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
+				ret += '<div><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button>';
+				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
 				ret += '</div>';	// end of 'content_qua_xxx'
     	  '</div></div>';
     	return ret;
@@ -351,6 +565,7 @@
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
+		<span class='glyphicon glyphicon-search'></span>
 		<p>日本温泉マップ</p>
 		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
 		</div>
