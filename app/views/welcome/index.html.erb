@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 	<script src="http://malsup.github.com/jquery.form.js"></script>
 	<%= stylesheet_link_tag "bootstrap.min" %>
+	<%= stylesheet_link_tag "carousel" %>
 	<%= javascript_include_tag "jquery.popupoverlay" %>
 	<%= javascript_include_tag "jquery.raty" %>
 	<%= javascript_include_tag "googlemap" %>
@@ -485,6 +486,7 @@
 	}
 	(function($){
 		$(function() {
+			$('#welcome_dialog').popup('show');
 			function mapClicked(e){
 				$("#qua_latitude").val(e.latLng.lat());
 				$("#qua_longitude").val(e.latLng.lng());
@@ -554,7 +556,6 @@
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
-		<span class='glyphicon glyphicon-search'></span>
 		<p>日本温泉マップ</p>
 		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
 		</div>
@@ -568,6 +569,7 @@
 		</div>
 		<%= render 'qua_entry_dialog' %>
 		<%= render 'review_dialog' %>
+		<%= render 'welcome_dialog' %>
 	</div>
 </body>
 </html>
