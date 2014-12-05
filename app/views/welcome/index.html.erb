@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 	<script src="http://malsup.github.com/jquery.form.js"></script>
 	<%= stylesheet_link_tag "bootstrap.min" %>
+	<%= stylesheet_link_tag "carousel" %>
 	<%= javascript_include_tag "jquery.popupoverlay" %>
 	<%= javascript_include_tag "jquery.raty" %>
 	<%= javascript_include_tag "googlemap" %>
@@ -485,6 +486,7 @@
 	}
 	(function($){
 		$(function() {
+			$('#welcome_dialog').popup('show');
 			function mapClicked(e){
 				$("#qua_latitude").val(e.latLng.lat());
 				$("#qua_longitude").val(e.latLng.lng());
@@ -567,6 +569,7 @@
 		</div>
 		<%= render 'qua_entry_dialog' %>
 		<%= render 'review_dialog' %>
+		<%= render 'welcome_dialog' %>
 	</div>
 </body>
 </html>
