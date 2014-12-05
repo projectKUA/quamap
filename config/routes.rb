@@ -4,7 +4,9 @@ Rails.application.routes.draw do
       get 'show_image'
     end
     collection do
+      get 'new_ajax'
       get 'list_by_qua'
+      post 'create_ajax'
     end
   end
 

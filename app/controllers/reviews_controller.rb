@@ -17,6 +17,16 @@ class ReviewsController < ApplicationController
     @review = Review.new
   end
 
+  # GET /reviews/new_ajax
+  def new_ajax
+    @qua = Qua.find(params[:qua_id])
+    respond_to do |format|
+      format.json {
+        render json: { :quas => @qua }
+      }
+    end
+  end
+
   # GET /reviews/1/edit
   def edit
   end
@@ -35,7 +45,18 @@ class ReviewsController < ApplicationController
       end
     end
   end
-
+  def create_ajax
+    @review = createWithImage(review_params)
+    respond_to do |format|
+      if @review.save
+        format.json {
+          render json: { :review => @review }
+        }
+      else
+        format.json { render json: @review.errors, status: :unprocessable_entity }
+      end
+    end
+  end
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update

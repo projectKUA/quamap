@@ -23,10 +23,15 @@
 		margin: 0px 10px 10px 0px;
 	}
 	.review-top img{
-		max-width: 100%;
+		max-width: 450px;
 		max-height: 350px;
 		float:right;
-}
+	}
+	.review-top img.img_review_entry{
+		max-width: 150px;
+		max-height: 150px;
+		float:right;
+	}
 .review-content{
 	width:70%;
 	float:left;
@@ -129,3 +134,24 @@ img.img_info_window{
 .gm-style-iw div {
     /* overflow: hidden ! important; */
 }
+
+div.field label{
+	vertical-align: top;
+	min-width: 160px;
+	float: left;
+}
+div.clear{
+	clear: both;
+}
+
+div.field textarea{
+	width: 300px;
+	height: 80px;
+}
+div.field select{
+	float: left;
+}
+div.review_raty{
+	float:left;
+}
+
