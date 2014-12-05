@@ -549,6 +549,11 @@
 			});
 		});
 	})(jQuery);
+        $(document).ready(function () {
+          $('.qua_name').on("click", function() {
+            alert($(this).next('td').text());
+          });
+        });
 	</script>
 </head>
 <body>
