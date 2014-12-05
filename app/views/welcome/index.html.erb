@@ -393,25 +393,14 @@
 				$("#btn_enter_review").click(function(e){
 					var t = $(".tab-pane.in.active");
 
-					if(t.attr("id") === "tab1"){
-						var nr = $("#new_review");
-						$("#new_review").ajaxSubmit(function(data) {
-							// 「レビューを見る」を表示
-							$('#link_show_review_' + qua.id ).click();
-						});
-						// いったん自分を閉じる
-						$("#btn_close_review").click();
-
-					}else{
-						var nr = $("#new_review");
-						$("#new_review").ajaxSubmit(function(data) {
-							// 「レビューを見る」を表示
-							$('#link_show_review_' + qua.id ).click();
-						});
-						// いったん自分を閉じる
-						$("#btn_close_review").click();
-
-					}
+					// formが同名になってしまうので各タブの子要素から探す
+					var nr = t.children("#new_review");
+					nr.ajaxSubmit(function(data) {
+						// 「レビューを見る」を表示
+						$('#link_show_review_' + qua.id ).click();
+					});
+					// いったん自分を閉じる
+					$("#btn_close_review").click();
 				});
 			});
 		})(jQuery);
