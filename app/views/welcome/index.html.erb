@@ -549,6 +549,9 @@
 					}
 				]});
 			});
+			$("#adminmenu").click(function(){
+				$("#div_admin").toggle();
+			});
 		});
 	})(jQuery);
 	</script>
@@ -556,16 +559,19 @@
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
-		<p>日本温泉マップ</p>
+		<p id="adminmenu">日本温泉マップ</p>
 		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
 		</div>
 		<div>
 			<br />
 			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default'>温泉を登録する</button>
+		</div>
+		<br />
+		<div id="div_admin" style="display: none; border: solid 1px; width: 100px;">
+			<p>管理者メニュー</p>
+			<a id='link_quas' href='/quas' target='_blank'>Quas</a>
 			<br />
-			<a href='/quas' target='_blank'>Quas</button>
-			<br />
-			<a href='/reviews' target='_blank'>Reviews</button>
+			<a id='link_reviews' href='/reviews' target='_blank'>Reviews</a>
 		</div>
 		<%= render 'qua_entry_dialog' %>
 		<%= render 'review_dialog' %>
