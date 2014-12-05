@@ -1,4 +1,5 @@
 class Qua < ActiveRecord::Base
+  scope :named, ->(q) { where 'name like ?', "%#{q}%" }
   def self.random
     order("random()").limit(1)
   end

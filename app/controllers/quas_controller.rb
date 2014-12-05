@@ -6,7 +6,11 @@ class QuasController < ApplicationController
   def index
     @quas = Qua.all
   end
-
+  
+  def ajax_qua_list
+    @quas = Qua.named params[:q]
+  end
+  
   # GET /quas/1
   # GET /quas/1.json
   def show

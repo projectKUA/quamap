@@ -14,3 +14,27 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+$(function() {
+var
+preFunc = null,
+preInput = '',
+input = '',
+ajaxPost = function(input)
+{
+  $.ajax({
+    url: "quas/ajax_qua_list",
+      type: "GET",
+      data: ("q=" + input)
+  });
+};
+
+$('#inc_search').on('keyup', function() {
+  input = $.trim($(this).val());   //前後の不要な空白を削除
+  if(preInput !== input){
+    clearTimeout(preFunc);
+    preFunc = setTimeout(ajaxPost(input), 500);
+  }
+  preInput = input;
+});
+});
+
