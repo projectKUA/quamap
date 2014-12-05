@@ -1,0 +1,20 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% quas.each do |qua| %>
+      <tr>
+        <td class="qua_name" ><%= user.name %></td>
+        <td style="visibility:hidden;">       
+          <td><%= qua.id %>,<%= qua.name %>,<%= qua.latitude %>,<%= qua.longitude %>,<%= qua.quality %>,<%= qua.effect %>,<%= qua.stay_required %>,<%= qua.price  %>,<%= qua.url  %>,<%= qua.image1_caption %>,<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', align:'right') : image_tag('onsen.png', class:'img_info_window', align:'right') %></td>
+          <td>
+          </td>                          
+      </tr>
+    <% end %>
+  </tbody>
+</table>
