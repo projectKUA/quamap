@@ -14,3 +14,36 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+$(function() {
+var
+preFunc = null,
+preInput = '',
+input = '',
+ajaxPost = function(input)
+{
+  $.ajax({
+    url: "quas/ajax_qua_list",
+      type: "GET",
+      data: ("q=" + input),
+      success: function (result ) {
+        $('.qua_name').on("click", function() {
+           var qua = $(this).next('td').text().split(',');
+           var lat = qua[2];
+           var lon = qua[3];
+           mapObj.panTo(new google.maps.LatLng(lat, lon));
+           entryMapIcon(qua[0], qua[1], qua[2], qua[3], qua[4], qua[5], qua[6], qua[7], qua[8], qua[9], qua[10], true);
+        });
+      }
+  });
+};
+
+$('#inc_search').on('keyup', function() {
+  input = $.trim($(this).val());   //前後の不要な空白を削除
+  if(preInput !== input){
+    clearTimeout(preFunc);
+    preFunc = setTimeout(ajaxPost(input), 500);
+  }
+  preInput = input;
+});
+});
+

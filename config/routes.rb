@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     end
     collection do
       post 'create_ajax'
+      get 'ajax_qua_list'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.
