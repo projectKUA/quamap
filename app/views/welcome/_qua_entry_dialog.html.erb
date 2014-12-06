@@ -1,4 +1,11 @@
-<div id="dialog" title="温泉を登録する" style='display:none;'>
+<div id='qua_entry_dialog' style="width: 300px;" class='dialog well'>
+	<nav class="navbar navbar-inverse">
+		<div class="container">
+		  <div class="navbar-header">
+		    <span class="navbar-brand">温泉を登録する</span>
+		  </div>
+		</div>
+	</nav>
         <% @qua = Qua.new %>
         <%= render :template => 'quas/_form2' %>
 </div>

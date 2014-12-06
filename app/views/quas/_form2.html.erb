@@ -12,44 +12,44 @@
   <% end %>
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
   <div class="field">
-    名前<br>
-    <%= f.text_field :name %>
+    <span id="label">名前:</span>
+    <span><%= f.text_field :name %></span>
   </div>
   <div class="field">
-    緯度<br>
-    <%= f.text_field :latitude %>
+    <span>緯度:</span>
+    <span><%= f.text_field :latitude %></span>
   </div>
   <div class="field">
-    経度<br>
-    <%= f.text_field :longitude %>
+    <span>経度:</span>
+    <span><%= f.text_field :longitude %></span>
   </div>
   <div class="field">
-    泉質<br>
-    <%= f.text_field :quality %>
+    <span>泉質:</span>
+    <span><%= f.text_field :quality %></span>
   </div>
   <div class="field">
-    効能<br>
-    <%= f.text_field :effect %>
+    <span>効能:</span>
+    <span><%= f.text_field :effect %></span>
   </div>
   <div class="field">
-    Webサイト<br>
-    <%= f.text_field :url %>
+    <span>Webサイト:</span>
+    <span><%= f.text_field :url %></span>
   </div>
   <div class="field">
-    宿泊の必要<br>
-    <%= f.radio_button :stay_required, "0" %>無
-    <%= f.radio_button :stay_required, "1" %>有
+    <span>宿泊の必要:</span>
+    <span><%= f.radio_button :stay_required, "0" %>無
+    <%= f.radio_button :stay_required, "1" %>有</span>
   </div>
   <div class="field">
-    料金<br>
-    <%= f.text_field :price %>
+    <span>料金:</span>
+    <span><%= f.text_field :price %></span>
   </div>
   <div class="field">
-    画像タイトル<br>
-    <%= f.text_field :image1_caption %>
+    <span>画像タイトル</span>
+    <span><%= f.text_field :image1_caption %></span>
   </div>
   <div class="field">
-    画像ファイル<br>
-    <%= f.file_field :image1, accept: "image/jpeg" %>
+    <span>画像ファイル</span>
+    <span><%= f.file_field :image1, accept: "image/jpeg" %></span>
   </div>
 <% end %>

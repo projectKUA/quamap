@@ -25,6 +25,9 @@
 		transition: all 0.3s;
 		margin: 20px 0px 0px 0px;
 	}
+	span #label{
+		width: 150px;
+	}
 	</style>
 	<script type="text/javascript">
 	/** 「レビューを見る」クリック時の挙動 */
@@ -72,6 +75,7 @@
 	function createReviewDialogTop(qua){
 		(function($){
 			$(function() {
+
 				// 画面タイトル
 				$("#review_qua_title").remove();
 				if(qua.name !== null){
@@ -486,7 +490,10 @@
 	}
 	(function($){
 		$(function() {
-			$('#welcome_dialog').popup('show');
+			$('#welcome_dialog').popup({
+				autoopen: "true",
+				traisition: 'all 0.3s'
+			});
 			function mapClicked(e){
 				$("#qua_latitude").val(e.latLng.lat());
 				$("#qua_longitude").val(e.latLng.lng());
@@ -524,8 +531,18 @@
 				google.maps.event.addListener(mapObj, 'click', mapClicked);
 			};
 			google.maps.event.addDomListener(window, 'load', displayMap);
+			$('#qua_entry_dialog').popup({
+				type: 'tooltip',
+				horizontal: 'leftedge',
+				vertical: 'top',
+				offsettop: 40,
+				offsetleft: 110,
+				tooltipanchor: $('#buttonEntryQua'),
+				traisition: 'all 0.3s',
+				opacity: 0.3
+			});
 			$('#review_dialog').popup({
-				traisition: '0.3s all',
+				traisition: 'all 0.3s',
 				opacity: 0.3
 			});
 			$("#buttonEntryQua").click(function(){
@@ -564,7 +581,7 @@
 		</div>
 		<div>
 			<br />
-			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default'>温泉を登録する</button>
+			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default qua_entry_dialog_open'>温泉を登録する</button>
 		</div>
 		<br />
 		<div id="div_admin" style="display: none; border: solid 1px; width: 100px;">
