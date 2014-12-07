@@ -8,4 +8,12 @@
 	</nav>
         <% @qua = Qua.new %>
         <%= render :template => 'quas/_form2' %>
+  <hr />
+	<div id='qua_entry_footer' style='text-align: center;'>
+		<button id="buttonQuaEntry" class='qua_entry_dialog_close btn btn-default' onclick="execQuaEntry()">登録する</button>
+		<button id="buttonCloseQuaEntryDialog" class='qua_entry_dialog_close btn btn-default'>閉じる</button>
+	</div>
+
+
+
 </div>

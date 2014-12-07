@@ -423,9 +423,31 @@
 				});
 			});
 		})(jQuery);
-
   }
-
+  function execQuaEntry(elem, value){
+		(function($){
+			$(function() {
+				// #new_quaにsubmitを行なう。
+				// 実行後にwelcome/index.html.erbを再表示する。
+				$("#new_qua").ajaxSubmit(function(data) {
+						var qua = data.qua;
+						var image = qua.image1 == null ? '<img class="img_info_window" src="/assets/onsen.png">' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image">'
+						entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
+							qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
+				});
+			});
+		})(jQuery);
+  }
+  function onOpenQuaEntryDialog(){
+		(function($){
+			$(function() {
+				// 緯度・経度を現在の中心点で入力しておく
+				var latlng = mapObj.getCenter();
+				$("#qua_latitude").val(latlng.lat());
+				$("#qua_longitude").val(latlng.lng());
+			});
+		})(jQuery);
+  }
 	// google map object
 	var mapObj;
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
@@ -530,11 +552,12 @@
 			google.maps.event.addDomListener(window, 'load', displayMap);
 			$('#qua_entry_dialog').popup({
 				type: 'tooltip',
+				blur: false,
 				horizontal: 'leftedge',
 				vertical: 'top',
 				offsettop: 40,
 				offsetleft: 110,
-				tooltipanchor: $('#buttonEntryQua'),
+				tooltipanchor: $('#buttonOpenQuaEntryDialog'),
 				traisition: 'all 0.3s',
 				opacity: 0.3
 			});
@@ -592,7 +615,7 @@
                 </div>
 		<div>
 			<br />
-			<button id='buttonEntryQua' type='button' class='btn btn-sm btn-default qua_entry_dialog_open'>温泉を登録する</button>
+			<button id='buttonOpenQuaEntryDialog' type='button' class='btn btn-sm btn-default qua_entry_dialog_open' onclick="onOpenQuaEntryDialog()">温泉を登録する</button>
 		</div>
 		<br />
 		<div id="div_admin" style="display: none; border: solid 1px; width: 100px;">
