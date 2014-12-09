@@ -1,12 +1,5 @@
 <div id='welcome_dialog' style="width: 90%;" class='dialog well'>
-  <nav class="navbar navbar-inverse" style="margin-bottom: 5px;">
-    <div class="container">
-      <div class="navbar-header">
-        <span class="navbar-brand">QuaMap</span>
-      </div>
-    </div>
-  </nav>
-  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 400px; margin-bottom: 20px;">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-bottom: 20px;">
 
     <!-- Indicators -->
     <ol class="carousel-indicators">
@@ -14,7 +7,7 @@
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
-    <div class="carousel-inner" role="listbox" style="height: 400px;">
+    <div class="carousel-inner" role="listbox">
 
       <div class="item active">
         <%= image_tag('top1.jpg', alt:'First slide') %>
@@ -66,8 +59,8 @@
     <div class="row">
       <div class="col-lg-4">
         <%= image_tag('top4.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
-        <h2><a id="aaaa">近くの温泉を探す</a></h2>
-        <p>近所の地図を表示します。<br />（GPSをONにしてください。）</p>
+        <h2><a class="welcome_dialog_close qua_entry_dialog_open" onclick="onOpenQuaEntryDialog()">温泉を登録する</a></h2>
+        <p>温泉の登録はこちらから</p>
       </div>
       <div class="col-lg-4">
         <%= image_tag('top5.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
@@ -76,14 +69,12 @@
           <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"></input>
           <button class='btn btn-default btn-xs' onclick="getXXX(inc_search.value)">検索</button>
         </p>
-
       </div>
       <div class="col-lg-4">
         <%= image_tag('top6.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
-        <h2><a id="aaaa">温泉を登録する</a></h2>
-        <p>温泉の登録はこちらから</p>
+        <h2><a id="nav_gps" class="welcome_dialog_close">近くの温泉を探す</a></h2>
+        <p>近所の地図を表示します。<br />（GPSをONにしてください。）</p>
       </div>
     </div>
   </div>
-  <p style="float: right;">©2014-2015 Project KUA / AIIT all rights reserved.</p>
 </div>

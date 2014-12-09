@@ -608,7 +608,10 @@ function getLatLngFromKeyword(place){
 				offsetleft: 110,
 				tooltipanchor: $('#buttonOpenQuaEntryDialog'),
 				traisition: 'all 0.3s',
-				opacity: 0.3
+				opacity: 0.3,
+				opentransitionend: function() {
+					$("#qua_name").focus();
+				}
 			});
 			$('#review_dialog').popup({
 				traisition: 'all 0.3s',
@@ -617,6 +620,21 @@ function getLatLngFromKeyword(place){
 			$("#adminmenu").click(function(){
 				$("#div_admin").toggle();
 			});
+			$("#nav_gps").click(function(){
+				if(navigator.geolocation){
+					// alert("位置情報は使用可能です");
+					navigator.geolocation.getCurrentPosition(onSuccess, onError, {enableHighAccuracy:true});
+					function onSuccess(pos){
+						mapObj.panTo({ lat: pos.coords.latitude, lng: pos.coords.longitude});	// LatLngLiteral
+					}
+					function onError(pos){
+						alert("error!");
+					}
+				}
+			});
+
+
+
 		});
 	})(jQuery);
 	</script>
