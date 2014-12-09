@@ -30,6 +30,51 @@
 	}
 	</style>
 	<script type="text/javascript">
+
+function getLatLngFromKeyword(place){
+  (function($){
+    $(function() {
+      // ジオコーダのコンストラクタ
+      var geocoder = new google.maps.Geocoder();
+
+      // geocodeリクエストを実行。
+      // 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
+      // 第２引数はコールバック関数。
+      geocoder.geocode({
+        address: place
+      }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results[0].geometry) {
+
+            // 緯度経度を取得
+            var latlng = results[0].geometry.location;
+
+            // 住所を取得(日本の場合だけ「日本, 」を削除)
+            var address = results[0].formatted_address.replace(/^日本, /, '');
+          	$("#qua_latitude").val(latlng.k);
+          	$("#qua_longitude").val(latlng.B);
+	          mapObj.panTo(latlng);
+          }
+        } else if (status == google.maps.GeocoderStatus.ERROR) {
+          // console.log("サーバとの通信時に何らかのエラーが発生！");
+        } else if (status == google.maps.GeocoderStatus.INVALID_REQUEST) {
+          // console.log("リクエストに問題アリ！geocode()に渡すGeocoderRequestを確認せよ！！");
+        } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+          // console.log("短時間にクエリを送りすぎ！落ち着いて！！");
+        } else if (status == google.maps.GeocoderStatus.REQUEST_DENIED) {
+          // console.log("このページではジオコーダの利用が許可されていない！・・・なぜ！？");
+        } else if (status == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
+          // console.log("サーバ側でなんらかのトラブルが発生した模様。再挑戦されたし。");
+        } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+          // console.log("見つかりません");
+        } else {
+          // console.log("えぇ～っと・・、バージョンアップ？");
+        }
+      });
+    });
+  })(jQuery);
+}
+
 	/** 「レビューを見る」クリック時の挙動 */
 	function reviewLinkClicked(link){
 		(function($){
@@ -196,7 +241,6 @@
 				var id = 'review_content_' + review.qua_id + '_' + review.id;
 				// 基底タグ idにreview.id(review_content_xxx)を格納する
 				var content =  $('<div id="' + id +'" class="review-content"></div>');
-				// $("#review_contents").append('<div id="' + id +'" class="review-content"></div>').append(
 					$("#review_contents").append(content);
 					// 基底タグにコンテンツを追加する
 					content.append(
@@ -452,23 +496,26 @@
 	var mapObj;
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
     	var ret =
-          '<div style="overflow:hidden;"><div id="content_qua_' + id + '" class="firstheading">' +
-          '<dl><dd>' + '<h1>' + name + '</h1>' + image + '</dd></dl>' + 
-          '</div></div>' +
-          '<div>' +
-          '<dl>' +
-           '<dd>' + '<b>泉質:</b>' + quality + '</dd>' +
-           '<dd>' + '<b>効能:</b>' + effect + '</dd>' +
-           '<dd>' + '<b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</dd>' +
-           '<dd>' + '<b>料金:</b>' + (price === "" ? "不明" : price + "円" ) + '</dd>'
-        if(url !== ''){
-            ret += '<dd><a href="' + url + '" target="_brank"><b>Website</b></a></dd>';
-        }else{
-            ret += '<dd><b>No Website</b></a></dd>';
-        }
-        ret += '<dd><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button>'
-        ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></dd>'
-        ret += '</dl></div>'
+    	  '<div id="content_qua_' + id + '" class="info_window">'+
+    	  '<div id="siteNotice"></div>' +
+    	   image +
+    	  '<div class="firstheading"><h1 id="firstHeading">' + name + '</h1></div>'+
+    	  '<div style="clear: both;"></div>' +
+    	  '<div id="bodyContent" class="min-width:450px; width: 100%; clear: both;">'+
+    	  '<p style="white-space: nowrap;"><b>泉質:</b>' + quality + '</p>'+
+    	  '<p><b>効能:</b>' + effect + '</p>'+
+    	  '<p><b>宿泊の必要:</b>' + (stay_required ? '有' : '無') + '</p>'+
+    	  '<p><b>料金:</b>' + (price === "" ? "不明" : price + "円" ) + '</p>';
+				if(url !== ''){
+					ret += '<p style="white-space: nowrap;"><a href="' + url + '" target="_brank"><b>Website</b></a></p>';
+				}else{
+					ret += '<p style="white-space: nowrap;"><b>No Website</b></a></p>';
+				}
+				ret += '</div>';	// end of 'bodyContent'
+				ret += '<div><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button>';
+				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
+				ret += '</div>';	// end of 'content_qua_xxx'
+    	  '</div></div>';
     	return ret;
     }
 	// 温泉情報　名称,緯度,経度,泉質,効能
@@ -476,7 +523,7 @@
         <% @quas.each do |q| %>
 	    [ '<%= q.id %>', '<%= q.name %>', <%= q.latitude %>, <%= q.longitude %>,'<%= q.quality.html_safe %>',
 	    '<%= q.effect.html_safe %>', '<%= q.stay_required %>', '<%= q.price %>', '<%= q.url %>', '<%= q.image1_caption %>',
-	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', align:'right') : image_tag('onsen.png', class:'img_info_window', align:'right') %>'] <%= ", " unless q == @quas.last %>
+	    '<%= q.image1.present? ? image_tag(show_image_qua_path(q), class:'img_info_window', alt:'No image') : image_tag('onsen.png', class:'img_info_window', alt:'No image') %>'] <%= ", " unless q == @quas.last %>
         <% end %>
     ];
 
@@ -502,6 +549,8 @@
 			});
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
+			  // 楽天APIの呼び出しを行なう
+
 			});
 			if(disp){
 			  infowindow.open(mapObj,marker);
@@ -559,48 +608,36 @@
 				offsetleft: 110,
 				tooltipanchor: $('#buttonOpenQuaEntryDialog'),
 				traisition: 'all 0.3s',
-				opacity: 0.3
+				opacity: 0.3,
+				opentransitionend: function() {
+					$("#qua_name").focus();
+				}
 			});
 			$('#review_dialog').popup({
 				traisition: 'all 0.3s',
 				opacity: 0.3
 			});
-			$("#buttonEntryQua").click(function(){
-				$("#dialog").dialog(
-					{ buttons: [{
-						text: "登録", click: function() {
-							// #new_quaにsubmitを行なう。
-							// 実行後にwelcome/index.html.erbを再表示する。
-							$("#new_qua").ajaxSubmit(function(data) {
-									var qua = data.qua;
-									var image = qua.image1 == null ? '<img class="img_info_window" src="/assets/onsen.png" align:"right">' : '<img class="img_info_window" src="/quas/' + qua.id + '/show_image" align:"right">'
-									entryMapIcon(qua.id, qua.name, qua.latitude, qua.longitude, qua.quality, qua.effect,
-										qua.stay_required, qua.price, qua.url, qua.image1_caption, image , true);
-									$("#dialog").dialog( "close" );
-							});
-						}
-					},{
-						text: "キャンセル", click: function() {
-							$(this).dialog( "close" );
-						}
-					}
-				]});
-			});
 			$("#adminmenu").click(function(){
 				$("#div_admin").toggle();
 			});
+			$("#nav_gps").click(function(){
+				if(navigator.geolocation){
+					// alert("位置情報は使用可能です");
+					navigator.geolocation.getCurrentPosition(onSuccess, onError, {enableHighAccuracy:true});
+					function onSuccess(pos){
+						mapObj.panTo({ lat: pos.coords.latitude, lng: pos.coords.longitude});	// LatLngLiteral
+					}
+					function onError(pos){
+						alert("error!");
+					}
+				}
+			});
+
+
+
 		});
 	})(jQuery);
-        $(document).ready(function(){
-          $('.qua_name').on("click", function() {
-            var qua = $(this).next('td').text().split(',');
-            var lat = qua[2];
-            var lon = qua[3];
-            mapObj.panTo(new google.maps.LatLng(lat, lon));
-            entryMapIcon(qua[0], qua[1], qua[2], qua[3], qua[4], qua[5], qua[6], qua[7], qua[8], qua[9], qua[10], true);
-          });	
-        });
-        </script>
+	</script>
 </head>
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
@@ -608,11 +645,6 @@
 		<p id="adminmenu">日本温泉マップ</p>
 		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
 		</div>
-                <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text">
-
-                <div id='qua_list' style="display:none">
-                   <%= render partial: 'qua_list', locals: { quas: @quas} %>
-                </div>
 		<div>
 			<br />
 			<button id='buttonOpenQuaEntryDialog' type='button' class='btn btn-sm btn-default qua_entry_dialog_open' onclick="onOpenQuaEntryDialog()">温泉を登録する</button>
