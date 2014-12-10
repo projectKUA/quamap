@@ -36,7 +36,6 @@ function getLatLngFromKeyword(place){
     $(function() {
       // ジオコーダのコンストラクタ
       var geocoder = new google.maps.Geocoder();
-
       // geocodeリクエストを実行。
       // 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
       // 第２引数はコールバック関数。
@@ -468,6 +467,22 @@ function getLatLngFromKeyword(place){
 			});
 		})(jQuery);
   }
+  function editQuaLinkClicked(link){
+		(function($){
+			$(function() {
+				var qua_id = $(link).attr("id").substr(14);	// link.id = "link_edit_qua_xxx", and qua_id = xxx.
+				$.ajax({
+					url: "quas/" + qua_id + "/edit",
+					type: 'get',
+					dataType: "json",
+					success: function(data) {
+						$('#qua_entry_dialog').popup('show');
+					}
+				});
+			});
+		})(jQuery);
+
+  }
   function execQuaEntry(elem, value){
 		(function($){
 			$(function() {
@@ -513,7 +528,8 @@ function getLatLngFromKeyword(place){
 				}
 				ret += '</div>';	// end of 'bodyContent'
 				ret += '<div><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button>';
-				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
+				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button>';
+				ret += '<button id="link_edit_qua_' + id + '" class="btn btn-sm btn-link" onclick="editQuaLinkClicked(this)">温泉情報を修正する</button></div>';
 				ret += '</div>';	// end of 'content_qua_xxx'
     	  '</div></div>';
     	return ret;
@@ -632,9 +648,6 @@ function getLatLngFromKeyword(place){
 					}
 				}
 			});
-
-
-
 		});
 	})(jQuery);
 	</script>
@@ -642,12 +655,20 @@ function getLatLngFromKeyword(place){
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
-		<p id="adminmenu">日本温泉マップ</p>
-		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
+		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
+			<span class='glyphicon glyphicon-search'></span><input id="search" type="text">
+			<button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
+			<div id='qua_list' style="display:none">
+				<%= render partial: 'qua_list', locals: { quas: @quas} %>
+			</div>
+		</div>
+		<div id="adminmenu">日本温泉マップ</div>
+		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">
 		</div>
 		<div>
 			<br />
 			<button id='buttonOpenQuaEntryDialog' type='button' class='btn btn-sm btn-default qua_entry_dialog_open' onclick="onOpenQuaEntryDialog()">温泉を登録する</button>
+			<button id='buttonOpenWelcomeDialog' type='button' class='btn btn-sm btn-default welcome_dialog_open'>トップ画面を再表示する</button>
 		</div>
 		<br />
 		<div id="div_admin" style="display: none; border: solid 1px; width: 100px;">
