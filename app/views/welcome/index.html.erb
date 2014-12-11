@@ -86,19 +86,21 @@ function getLatLngFromKeyword(place){
 					data: "qua_id=" + qua_id,
 					dataType: "json",
 					success: function(data) {
+						var average = data.average_score.average_score;
+						var count_review = data.count_review;
 						var qua = data.quas;			// 温泉 自分自身が1件入っている
 						var reviews = data.reviews;	// 空配列の可能性もある
-						createReviewDialog(qua, reviews);
+						createReviewDialog(qua, reviews, count_review, average);
 					}
 				});
 			});
 		})(jQuery);
 	}
-	function createReviewDialog(qua, reviews){
+	function createReviewDialog(qua, reviews, count_review, average){
 		(function($){
 			$(function() {
 				createReviewDialogTop(qua);
-				createReviewDialogQuaInfo(qua);
+				createReviewDialogQuaInfo(qua, count_review, average);
 
 				// レビュー記事を作成する
 				// 件数を出したり、「ありません」とか出したりしたい
@@ -137,7 +139,7 @@ function getLatLngFromKeyword(place){
 		})(jQuery);
 	}
 
-	function createReviewDialogQuaInfo(qua){
+	function createReviewDialogQuaInfo(qua, count_review, average){
 		(function($){
 			$(function() {
 				// 泉質
@@ -156,10 +158,25 @@ function getLatLngFromKeyword(place){
 				replaceItem("#review_qua_price_item","review_qua_price_value", "span", (qua.price === null ? "不明" : qua.price + "円" ));
 
 				// 平均評価
-				// reviewsの総合評価の平均値を求め、評価として表示する
-                var score_string_to_num = Number(avarage_score.avarage_score);
-				var fixed_avarage_score = score_string_to_num.toFixed(2);
-				replaceItem("#review_avarage_total_score_item","review_avarage_total_score_value", "span", (fixed_avarage_score === null ? "未評価" : fixed_avarage_score ));
+				if(count_review === 0){
+					replaceItem("#review_avarage_total_score_item","review_avarage_total_score_value", "span", "まだ評価がありません");
+					$("#review_qua_avarage_label").remove();
+				}else{
+					var score_string_to_num = Number(average);
+					var fixed_avarage_score = score_string_to_num.toFixed(2);
+					// raty領域と評価人数を書き出す
+					$("#review_avarage_total_score_value").remove();
+
+					$("#review_avarage_total_score_item").append("<div id='review_avarage_total_score_value'> </div>");
+					replaceItem("#review_avarage_total_score_label","review_qua_avarage_label", "span", fixed_avarage_score + "<br /><br />" + count_review + "件の評価");
+					// $("#review_avarage_total_score_label").append(
+					//	"<span>" + count_review + "件の評価</span>");
+					// $("#review_avarage_total_score_value").append(
+					// 	"<div id='average_score_" + qua.id + "’>&nbsp;</div>");
+
+
+					execRaty("#review_avarage_total_score_value", fixed_avarage_score);
+				}
 			});
 		})(jQuery);
 	}
@@ -273,15 +290,17 @@ function getLatLngFromKeyword(place){
 					data: "qua_id=" + qua_id,
 					dataType: "json",
 					success: function(data) {
+						var count_review = data.count_review;
+						var average = data.average_score.average_score;
 						var qua = data.quas;			// 温泉 自分自身が1件入っている
-						createReviewEntryDialog(qua);
+						createReviewEntryDialog(qua, count_review, average);
 					}
 				});
 			});
 		})(jQuery);
 	}
 	/** 「レビューを書く」ダイアログを生成する */
-	function createReviewEntryDialog(qua){
+	function createReviewEntryDialog(qua, count_review, average){
 		(function($){
 			$(function() {
 				<% @review = Review.new %>
@@ -433,7 +452,7 @@ function getLatLngFromKeyword(place){
 				$("#btn_close_review").before(
 					'<button id="btn_enter_review" class="btn btn-default">書き込む</button>'
 				);
-				createReviewDialogQuaInfo(qua);
+				createReviewDialogQuaInfo(qua, count_review, average);
 				// ratyを初期化する
 				$(".review_select").each(function (index, elem) {
 					execRaty( "#" + elem.id + "_raty", 3);
@@ -730,11 +749,13 @@ function getLatLngFromKeyword(place){
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
 		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
-			<span class='glyphicon glyphicon-search'></span><input id="search" type="text">
-			<button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
-			<div id='qua_list' style="display:none">
-				<%= render partial: 'qua_list', locals: { quas: @quas} %>
-			</div>
+                <ul id="menu">
+                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"><button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
+
+                    <ul id="qua_list">
+                      <%= render partial: 'qua_list', locals: { quas: @quas} %>
+                    </ul>
+                </ul>
 		</div>
 		<div id="adminmenu">日本温泉マップ</div>
 		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">
