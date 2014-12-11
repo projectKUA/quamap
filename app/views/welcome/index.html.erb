@@ -10,7 +10,6 @@
 	<%= stylesheet_link_tag "carousel" %>
 	<%= javascript_include_tag "jquery.popupoverlay" %>
 	<%= javascript_include_tag "jquery.raty" %>
-	<%= javascript_include_tag "googlemap" %>
 	<%= javascript_include_tag "bootstrap" %>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 	<style>
@@ -749,11 +748,13 @@ function getLatLngFromKeyword(place){
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
 		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
-			<span class='glyphicon glyphicon-search'></span><input id="search" type="text">
-			<button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
-			<div id='qua_list' style="display:none">
-				<%= render partial: 'qua_list', locals: { quas: @quas} %>
-			</div>
+                <ul id="menu">
+                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"><button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
+
+                    <ul id="qua_list">
+                      <%= render partial: 'qua_list', locals: { quas: @quas} %>
+                    </ul>
+                </ul>
 		</div>
 		<div id="adminmenu">日本温泉マップ</div>
 		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">

@@ -8,7 +8,7 @@ class QuasController < ApplicationController
   end
   
   def ajax_qua_list
-    @quas = Qua.named params[:q]
+    @quas = Qua.named(params[:q]).limit(10)
   end
   
   # GET /quas/1
