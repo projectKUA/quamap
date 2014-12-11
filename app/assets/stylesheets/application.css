@@ -158,12 +158,13 @@ span#label{
 #menu ul {
   display: none;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 22px;
+  left: -105px;
   padding: 5px;
   width: 300px;
   border: solid 1px #ccc;
   background: #fff;
+  z-index: 100;
 }
 #menu ul li {
   margin: 0;
@@ -186,4 +187,7 @@ span#label{
   -webkit-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
 }
+
+
+
 

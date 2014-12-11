@@ -43,10 +43,11 @@ $('#inc_search').on('keyup', function() {
     preFunc = setTimeout(ajaxPost(input), 500);
   }
   preInput = input;
-  if ($('#menu input').val() != "" || $('div.qua_search_result').lenght() > 0){
-    $('#menu input').next().show();
+  if ($('div.qua_search_result') == null ) {$('ul#qua_list').hide()};
+  if ($('#menu input').val() != "" && $('div.qua_search_result').length > 0){
+    $('ul#qua_list').show();
   } else {
-    $('#menu input').next().hide();
+    $('ul#qua_list').hide();
   }
 });
 });
