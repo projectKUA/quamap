@@ -10,7 +10,9 @@
         <%= render :template => 'quas/_form2' %>
   <hr />
 	<div id='qua_entry_footer' style='text-align: center;'>
-		<button id="buttonQuaEntry" class='qua_entry_dialog_close btn btn-default' onclick="execQuaEntry()">登録する</button>
+		<button id="buttonQuaEntry" class='qua_entry_dialog_close btn btn-default' style='display: none;' onclick="execQuaEntry()">登録する</button>
+		<button id="buttonQuaEdit" class='qua_entry_dialog_close btn btn-default' style='display: none;' onclick="execQuaEdit()">編集する</button>
+		<button id="buttonQuaDestroy" class='qua_entry_dialog_close btn btn-default' style='display: none;' onclick="execQuaDestroy()">削除する</button>
 		<button id="buttonCloseQuaEntryDialog" class='qua_entry_dialog_close btn btn-default'>閉じる</button>
 	</div>
 
