@@ -82,12 +82,14 @@ class ReviewsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
   def list_by_qua
     @qua = Qua.find(params[:qua_id])
     @reviews = Review.where(qua_id: params[:qua_id])
+    avarage_score = {'avarage_score' => calc_avarage}
     respond_to do |format|
       format.json {
-        render json: { :reviews => @reviews, :quas => @qua }
+        render json: { :reviews => @reviews, :quas => @qua, :avarage_score => avarage_score}
       }
     end
   end
@@ -104,6 +106,11 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(:qua_id, :total_score, :quality_score, :convinience_score, :cost_score, :sight_score, :comment, :photo_data, :photo_title, :title, :nickname, :email)
     end
+
+    def calc_avarage
+      Review.average(:total_score, :conditions => ["qua_id = params[:qua_id]"])
+    end
+
     def createWithImage(review_params)
       upload_file = review_params[:photo_data]
       review = {}

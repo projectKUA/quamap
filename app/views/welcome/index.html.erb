@@ -157,6 +157,9 @@ function getLatLngFromKeyword(place){
 
 				// 平均評価
 				// reviewsの総合評価の平均値を求め、評価として表示する
+                var score_string_to_num = Number(avarage_score.avarage_score);
+				var fixed_avarage_score = score_string_to_num.toFixed(2);
+				replaceItem("#review_avarage_total_score_item","review_avarage_total_score_value", "span", (fixed_avarage_score === null ? "未評価" : fixed_avarage_score ));
 			});
 		})(jQuery);
 	}
