@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
 $(function() {
 var
 preFunc = null,
@@ -22,12 +21,12 @@ input = '',
 ajaxPost = function(input)
 {
   $.ajax({
-    url: "quas/ajax_qua_list",
+     url: "quas/ajax_qua_list",
       type: "GET",
       data: ("q=" + input),
       success: function (result ) {
-        $('.qua_name').on("click", function() {
-           var qua = $(this).next('td').text().split(',');
+        $('div.qua_search_result').on("click", function() {
+           var qua = $(this).find('div.qua_info').text().split(',');
            var lat = qua[2];
            var lon = qua[3];
            mapObj.panTo(new google.maps.LatLng(lat, lon));
@@ -44,6 +43,11 @@ $('#inc_search').on('keyup', function() {
     preFunc = setTimeout(ajaxPost(input), 500);
   }
   preInput = input;
+  if ($('#menu input').val() != "" || $('div.qua_search_result').lenght() > 0){
+    $('#menu input').next().show();
+  } else {
+    $('#menu input').next().hide();
+  }
 });
 });
 
