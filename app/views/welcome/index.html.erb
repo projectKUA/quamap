@@ -20,6 +20,7 @@
 		padding: 5px 8px 8px 5px;
 	}
 	div #review_dialog{
+		max-height: 95%;
 		overflow: scroll;
 		width: 70%;
 		transition: all 0.3s;
@@ -36,7 +37,6 @@ function getLatLngFromKeyword(place){
     $(function() {
       // ジオコーダのコンストラクタ
       var geocoder = new google.maps.Geocoder();
-
       // geocodeリクエストを実行。
       // 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
       // 第２引数はコールバック関数。
@@ -471,6 +471,42 @@ function getLatLngFromKeyword(place){
 			});
 		})(jQuery);
   }
+  function editQuaLinkClicked(link){
+		(function($){
+			$(function() {
+				var qua_id = $(link).attr("id").substr(14);	// link.id = "link_edit_qua_xxx", and qua_id = xxx.
+				$.ajax({
+					url: "quas/" + qua_id,
+					type: 'get',
+					dataType: "json",
+					success: function(data) {
+						// 温泉登録ダイアログに情報を入力する
+						$('#new_qua').attr("action", "/quas/" + data.id);
+						$('#qua_name').val(data.name);
+						$('#qua_latitude').val(data.latitude);
+						$('#qua_longitude').val(data.longitude);
+						$('#qua_quality').val(data.quality);
+						$('#qua_effect').val(data.effect);
+						$('#qua_url').val(data.url);
+						if(data.stay_required===1){
+							$('#qua_stay_required_1').attr("checked", true);
+						}else{
+							$('#qua_stay_required_0').attr("checked", true);
+						}
+						$('#qua_price').val(data.price);
+						$('#qua_image1_caption').val(data.image1_caption);
+						// 編集・削除ボタンを表示する
+						$("#buttonQuaEntry").hide();
+						$("#buttonQuaEdit").show();
+						$("#buttonQuaDestroy").show();
+
+						$('#qua_entry_dialog').popup('show');
+					}
+				});
+			});
+		})(jQuery);
+
+  }
   function execQuaEntry(elem, value){
 		(function($){
 			$(function() {
@@ -485,9 +521,54 @@ function getLatLngFromKeyword(place){
 			});
 		})(jQuery);
   }
+  function execQuaEdit(elem, value){
+		(function($){
+			$(function() {
+				// #new_quaにsubmitを行なう。
+				// 実行後にwelcome/index.html.erbを再表示する。
+				$.ajax({
+					url: $("#new_qua").attr("action"),
+					data: $("#new_qua").serializeArray(),
+					type: 'put',
+					dataType: "json",
+					success: function(data) {
+						alert("edit");
+					}
+				});
+			});
+		})(jQuery);
+  }
+  function execQuaDestroy(elem, value){
+		(function($){
+			$(function() {
+				$.ajax({
+					url: $("#new_qua").attr("action"),
+					data: $("#new_qua").serializeArray(),
+					type: 'delete',
+					dataType: "json",
+					success: function(data) {
+						var qua_id = $(this).attr("url").substr(6);	// this.url = "/quas/xxx", and qua_id = xxx.
+						// infoWindowを閉じて消す
+						arrInfoWindows[qua_id].close();
+						arrInfoWindows[qua_id] = null;
+						// 対象のアイコンを消す
+						arrQuaMarkers[qua_id].setMap(null);// marker.setMap(null);
+						arrQuaMarkers[qua_id] = null;
+					}
+				});
+
+			});
+		})(jQuery);
+  }
+
   function onOpenQuaEntryDialog(){
 		(function($){
 			$(function() {
+				// ひょっとしたら・・actionの書き換えが要るかもしれない
+				$('#new_qua').attr("action", "/quas/create_ajax");
+				$("#buttonQuaEntry").show();
+				$("#buttonQuaEdit").hide();
+				$("#buttonQuaDestroy").hide();
 				// 緯度・経度を現在の中心点で入力しておく
 				var latlng = mapObj.getCenter();
 				$("#qua_latitude").val(latlng.lat());
@@ -497,6 +578,10 @@ function getLatLngFromKeyword(place){
   }
 	// google map object
 	var mapObj;
+	// qua marker objects
+	var arrQuaMarkers = [];
+	// InfoWindows objects
+	var arrInfoWindows = [];
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
     	var ret =
     	  '<div id="content_qua_' + id + '" class="info_window">'+
@@ -516,7 +601,8 @@ function getLatLngFromKeyword(place){
 				}
 				ret += '</div>';	// end of 'bodyContent'
 				ret += '<div><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button>';
-				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>';
+				ret += '<button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button>';
+				ret += '<button id="link_edit_qua_' + id + '" class="btn btn-sm btn-link" onclick="editQuaLinkClicked(this)">温泉情報を修正する</button></div>';
 				ret += '</div>';	// end of 'content_qua_xxx'
     	  '</div></div>';
     	return ret;
@@ -547,13 +633,14 @@ function getLatLngFromKeyword(place){
 				title: title,
 				icon: icon
 			});
+			arrQuaMarkers[id] = marker;	// マーカーを配列で管理する
 			var infowindow = new google.maps.InfoWindow({
 				content: getQuaDialogString(id, title, quality, effect, stay_required, price, url, image_caption, image)
 			});
+			arrInfoWindows[id] = infowindow;	// infowindowも配列で管理する
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
 			  // 楽天APIの呼び出しを行なう
-
 			});
 			if(disp){
 			  infowindow.open(mapObj,marker);
@@ -635,9 +722,6 @@ function getLatLngFromKeyword(place){
 					}
 				}
 			});
-
-
-
 		});
 	})(jQuery);
 	</script>
@@ -645,12 +729,20 @@ function getLatLngFromKeyword(place){
 <body>
 	<div id="wrapper" style="width: 100%; height: 100%;">
 		<h1>The QUA Map</h1>
-		<p id="adminmenu">日本温泉マップ</p>
-		<div id="gmap" style="width: 99%; height: 500px; border: 1px solid Gray;">
+		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
+			<span class='glyphicon glyphicon-search'></span><input id="search" type="text">
+			<button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
+			<div id='qua_list' style="display:none">
+				<%= render partial: 'qua_list', locals: { quas: @quas} %>
+			</div>
+		</div>
+		<div id="adminmenu">日本温泉マップ</div>
+		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">
 		</div>
 		<div>
 			<br />
 			<button id='buttonOpenQuaEntryDialog' type='button' class='btn btn-sm btn-default qua_entry_dialog_open' onclick="onOpenQuaEntryDialog()">温泉を登録する</button>
+			<button id='buttonOpenWelcomeDialog' type='button' class='btn btn-sm btn-default welcome_dialog_open'>トップ画面を再表示する</button>
 		</div>
 		<br />
 		<div id="div_admin" style="display: none; border: solid 1px; width: 100px;">

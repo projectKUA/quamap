@@ -25,6 +25,12 @@ class QuasController < ApplicationController
   def edit
   end
 
+  # GET /quas/1/edit
+  def edit_ajax
+    @qua = Qua.find(:id)
+
+  end
+
   # POST /quas
   # POST /quas.json
   def create
