@@ -30,7 +30,6 @@ ajaxPost = function(input)
            var lat = qua[2];
            var lon = qua[3];
            mapObj.panTo(new google.maps.LatLng(lat, lon));
-           entryMapIcon(qua[0], qua[1], qua[2], qua[3], qua[4], qua[5], qua[6], qua[7], qua[8], qua[9], qua[10], true);
         });
       }
   });
