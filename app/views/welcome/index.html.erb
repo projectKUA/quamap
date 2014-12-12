@@ -540,7 +540,6 @@ function getLatLngFromKeywordOnQuaEntry(place){
 						$("#buttonQuaEntry").hide();
 						$("#buttonQuaEdit").show();
 						$("#buttonQuaDestroy").show();
-
 						$('#qua_entry_dialog').popup('show');
 					}
 				});
@@ -596,7 +595,6 @@ function getLatLngFromKeywordOnQuaEntry(place){
 						arrQuaMarkers[qua_id] = null;
 					}
 				});
-
 			});
 		})(jQuery);
   }
@@ -612,7 +610,9 @@ function getLatLngFromKeywordOnQuaEntry(place){
 				var latlng = mapObj.getCenter();
 				$("#qua_latitude").val(latlng.lat());
 				$("#qua_longitude").val(latlng.lng());
-				$("#qua_name").focus();
+				window.setTimeout(function(){
+					$("#qua_name").focus();
+				}, 100);
 			});
 		})(jQuery);
   }
@@ -622,6 +622,11 @@ function getLatLngFromKeywordOnQuaEntry(place){
 	var arrQuaMarkers = [];
 	// InfoWindows objects
 	var arrInfoWindows = [];
+	// hotel marker objects
+	var arrHotelMarkers = [];
+	// hotel InfoWindows objects
+	var arrHotelInfoWindows = [];
+
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
     	var ret =
     	  '<div id="content_qua_' + id + '" class="info_window">'+
@@ -681,11 +686,80 @@ function getLatLngFromKeywordOnQuaEntry(place){
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
 			  // 楽天APIの呼び出しを行なう
+				$.ajax({
+					url: "hotels",
+					type: 'get',
+					data: "latitude=" + lat + "&longitude=" + lng,
+					dataType: "json",
+					success: function(data) {
+						if(data.root.error !== undefined){
+							// 周辺に楽天に登録されたホテルはない
+						}	else if(data.root.hotels !== undefined){
+							// ホテルあり InfoWindowを作成する
+							data.root.hotels.hotel.forEach(function(hotel){
+								entryHotel(hotel);
+							});
+						}
+					}
+				});
 			});
 			if(disp){
 			  infowindow.open(mapObj,marker);
 			}
 	}
+	// ホテルアイコン
+	var hotelIcon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIbk9qcUs3Q3A4MUk',
+		// This marker is 20 pixels wide by 32 pixels tall.
+		new google.maps.Size(24, 24),
+		// The origin for this image is 0,0.
+		new google.maps.Point(0,0),
+		// The anchor for this image is the base of the flagpole at 0,32.
+		new google.maps.Point(0, 24)
+	);
+	function getHotelDialogString(hotel){
+		var ret =
+			'<div class="info_window">'+
+			'<div id="siteNotice"></div>' +
+			'<img class="img_hotel" src="' + hotel.hotelBasicInfo.hotelImageUrl + '" style="float: right;"></img>' +
+			'<img class="img_hotel" src="' + hotel.hotelBasicInfo.roomImageUrl + '" style="float: right;"></img>' +
+			'<div class="firstheading"><h3 id="firstHeading">' + hotel.hotelBasicInfo.hotelName + '</h3></div>'+
+			'<div style="clear: both;"></div>' +
+			'<div id="bodyContent" class="min-width:450px; width: 100%; clear: both;">'+
+			'<div id="hotel_' + hotel.hotelBasicInfo.hotelNo + '_rating"></div>' +
+			'<p style="white-space: nowrap;">' + hotel.hotelBasicInfo.hotelSpecial.substr(0, 40) + '</p>'+
+			'<p><b>宿泊料金:</b>' + hotel.hotelBasicInfo.hotelMinCharge + '円〜</p>';
+			ret += '</div>';	// end of 'bodyContent'
+			ret += '<div><a href="' + hotel.hotelBasicInfo.reviewUrl + '" target="_blank">レビュー</a>&nbsp;&nbsp;';
+			ret += '<a href="' + hotel.hotelBasicInfo.planListUrl + '" target="_blank">宿泊プラン</a>';
+			ret += '</div>';
+		return ret;
+	}
+	function entryHotel(hotel){
+		// 座標を国際系に変換する
+		var latlng = J2GPoint(hotel.hotelBasicInfo.latitude, hotel.hotelBasicInfo.longitude);
+		// hotel marker objects
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(latlng[0], latlng[1]),
+			map: mapObj,
+			title: hotel.hotelBasicInfo.hotelName,
+			icon: hotelIcon
+		});
+		arrHotelMarkers[hotel.hotelNo] = marker;	// マーカーを配列で管理する
+		var infowindow = new google.maps.InfoWindow({
+			content: getHotelDialogString(hotel)
+		});
+		arrHotelInfoWindows[hotel.hotelNo] = infowindow;	// infowindowも配列で管理する
+		google.maps.event.addListener(marker, 'click', function() {
+		  infowindow.open(mapObj,marker);
+		});
+	}
+	function J2GPoint(lat, lng) {
+		var latlng = [];
+		latlng.push((lat - lat * 0.00010695 + lng * 0.000017464 + 0.0046017) / 3600);
+		latlng.push((lng - lat * 0.000046038 - lng * 0.000083043 + 0.010040) / 3600);
+		return latlng;
+	}
+
 	(function($){
 		$(function() {
 			$('#welcome_dialog').popup({
@@ -777,7 +851,7 @@ function getLatLngFromKeywordOnQuaEntry(place){
                     </ul>
                 </ul>
 		</div>
-		<div id="adminmenu">日本温泉マップ</div>
+		<div id="adminmenu">温泉地図サービス</div>
 		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">
 		</div>
 		<div>
