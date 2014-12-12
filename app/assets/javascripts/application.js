@@ -24,22 +24,28 @@ ajaxPost = function(input)
      url: "quas/ajax_qua_list",
       type: "GET",
       data: ("q=" + input),
-      success: function (result ) {
+      success: function (result) {
         $('div.qua_search_result').on("click", function() {
            var qua = $(this).find('div.qua_info').text().split(',');
            var lat = qua[2];
            var lon = qua[3];
            mapObj.panTo(new google.maps.LatLng(lat, lon));
+           if(qua[0] !== null){
+             var qua_id = qua[0].trim();
+             arrInfoWindows[qua_id].open(mapObj,arrQuaMarkers[qua_id]);
+           }
         });
       }
   });
 };
 
 $('#inc_search').on('keyup', function() {
+  var parent = $(this).closest("div");
   input = $.trim($(this).val());   //前後の不要な空白を削除
   if(preInput !== input){
     clearTimeout(preFunc);
     preFunc = setTimeout(ajaxPost(input), 500);
+    getLatLngFromKeyword(input);
   }
   preInput = input;
   if ($('div.qua_search_result') == null ) {$('ul#qua_list').hide()};

@@ -58,21 +58,24 @@
   <div class="container marketing">
     <div class="row">
       <div class="col-lg-4">
+        <a class="welcome_dialog_close qua_entry_dialog_open" onclick="onOpenQuaEntryDialog()">
         <%= image_tag('top4.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
-        <h2><a class="welcome_dialog_close qua_entry_dialog_open" onclick="onOpenQuaEntryDialog()">温泉を登録する</a></h2>
+        <h2>温泉を登録する</h2>
+        </a>
         <p>温泉の登録はこちらから</p>
       </div>
       <div class="col-lg-4">
+        <a class="welcome_dialog_close" onclick="window.setTimeout(function(){document.getElementById('inc_search').focus()}, 100)">
         <%= image_tag('top5.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
         <h2>名前で検索する</h2>
-        <p>温泉を検索できます。<br />
-          <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"></input>
-          <button class='btn btn-default btn-xs welcome_dialog_close' onclick="getLatLngFromKeyword(inc_search.value)">検索</button>
-        </p>
+        </a>
+        <p>温泉を検索できます。</p>
       </div>
       <div class="col-lg-4">
+        <a id="nav_gps" class="welcome_dialog_close">
         <%= image_tag('top6.jpg', class:'img-circle', style:'width: 140px; height: 140px;') %>
-        <h2><a id="nav_gps" class="welcome_dialog_close">近くの温泉を探す</a></h2>
+        <h2>近くの温泉を探す</h2>
+        </a>
         <p>近所の地図を表示します。<br />（GPSをONにしてください。）</p>
       </div>
     </div>

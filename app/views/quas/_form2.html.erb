@@ -14,7 +14,7 @@
   <div class="field">
     <span id="label">名前:</span>
     <span><%= f.text_field :name %></span>
-    <button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(qua_name.value)">検索</button>
+    <button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeywordOnQuaEntry(qua_name.value, null)">検索</button>
   </div>
   <div class="field">
     <span>緯度:</span>
@@ -25,12 +25,12 @@
     <span><%= f.text_field :longitude %></span>
   </div>
   <div class="field">
-    <span>泉質:</span>
-    <span><%= f.text_field :quality %></span>
+    <span style="vertical-align: top;">泉質:</span>
+    <span><%= f.text_area :quality, style: "width: 220px; height: 60px; resize: none;" %></span>
   </div>
   <div class="field">
-    <span>効能:</span>
-    <span><%= f.text_field :effect %></span>
+    <span style="vertical-align: top;">効能:</span>
+    <span><%= f.text_area :effect, style: "width: 220px; height: 60px; resize: none;" %></span>
   </div>
   <div class="field">
     <span>Webサイト:</span>

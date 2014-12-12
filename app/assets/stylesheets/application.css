@@ -23,8 +23,8 @@
 		margin: 0px 10px 10px 0px;
 	}
 	.review-top img{
-		max-width: 450px;
-		max-height: 350px;
+		max-width: 400px;
+		max-height: 300px;
 		float:right;
 	}
 	.review-top img.img_review_entry{
@@ -122,8 +122,13 @@ div.info_window{
 	width:200px;
 }
 img.img_info_window{
-	max-width: 400px;
-	max-height: 220px;
+	max-width: 300px;
+	max-height: 200px;
+	float: right;
+}
+img.img_hotel{
+	max-width: 180px;
+	max-height: 150px;
 	float: right;
 }
 

@@ -33,46 +33,68 @@
 	<script type="text/javascript">
 
 function getLatLngFromKeyword(place){
-  (function($){
-    $(function() {
-      // ジオコーダのコンストラクタ
-      var geocoder = new google.maps.Geocoder();
-      // geocodeリクエストを実行。
-      // 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
-      // 第２引数はコールバック関数。
-      geocoder.geocode({
-        address: place
-      }, function(results, status) {
+	(function($){
+		$(function() {
+			// ジオコーダのコンストラクタ
+			var geocoder = new google.maps.Geocoder();
+			// geocodeリクエストを実行。
+			// 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
+			// 第２引数はコールバック関数。
+			geocoder.geocode({
+				address: place
+			}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          if (results[0].geometry) {
-
-            // 緯度経度を取得
-            var latlng = results[0].geometry.location;
-
-            // 住所を取得(日本の場合だけ「日本, 」を削除)
-            var address = results[0].formatted_address.replace(/^日本, /, '');
-          	$("#qua_latitude").val(latlng.k);
-          	$("#qua_longitude").val(latlng.B);
-	          mapObj.panTo(latlng);
-          }
-        } else if (status == google.maps.GeocoderStatus.ERROR) {
-          // console.log("サーバとの通信時に何らかのエラーが発生！");
-        } else if (status == google.maps.GeocoderStatus.INVALID_REQUEST) {
-          // console.log("リクエストに問題アリ！geocode()に渡すGeocoderRequestを確認せよ！！");
-        } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-          // console.log("短時間にクエリを送りすぎ！落ち着いて！！");
-        } else if (status == google.maps.GeocoderStatus.REQUEST_DENIED) {
-          // console.log("このページではジオコーダの利用が許可されていない！・・・なぜ！？");
-        } else if (status == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
-          // console.log("サーバ側でなんらかのトラブルが発生した模様。再挑戦されたし。");
-        } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-          // console.log("見つかりません");
-        } else {
-          // console.log("えぇ～っと・・、バージョンアップ？");
-        }
-      });
-    });
-  })(jQuery);
+					for (var i in results) {
+						if (results[i].geometry) {
+							// qua_listにgeocodeの検索結果を追記する
+							// 緯度経度を取得
+							var latlng = results[i].geometry.location;
+							// 住所を取得(日本の場合だけ「日本, 」を削除)
+							// 「名前」として表示する
+							var address = results[i].formatted_address.replace(/^日本, /, '');
+							$("#qua_list").append('<li><div class="qua_search_result"><div style="overflow:hidden;"><div style="float:left;">' +
+								'<div class="qua_name"><b>' + address + '</b></div>' +
+								'<div class="qua_info" style="display:none;">,' + address + ',' + latlng.k + ',' + latlng.D + '</div>' +
+								'</div></div></div></li>');
+							$('div.qua_search_result').on("click", function() {
+								var qua = $(this).find('div.qua_info').text().split(',');
+								var lat = qua[2];
+								var lon = qua[3];
+								mapObj.panTo(new google.maps.LatLng(lat, lon));
+							});
+						}
+					}
+				}
+			});
+		});
+	})(jQuery);
+}
+function getLatLngFromKeywordOnQuaEntry(place){
+	(function($){
+		$(function() {
+			// ジオコーダのコンストラクタ
+			var geocoder = new google.maps.Geocoder();
+			// geocodeリクエストを実行。
+			// 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
+			// 第２引数はコールバック関数。
+			geocoder.geocode({
+				address: place
+			}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+					if (results[0].geometry) {
+						// 緯度経度を取得
+						var latlng = results[0].geometry.location;
+						// 住所を取得(日本の場合だけ「日本, 」を削除)
+						// 「名前」として表示する
+						var address = results[0].formatted_address.replace(/^日本, /, '');
+						$("#qua_latitude").val(latlng.k);
+						$("#qua_longitude").val(latlng.D);
+						mapObj.panTo(latlng);
+					}
+				}
+			});
+		});
+	})(jQuery);
 }
 
 	/** 「レビューを見る」クリック時の挙動 */
@@ -146,7 +168,7 @@ function getLatLngFromKeyword(place){
 				replaceItem("#review_qua_quality_item","review_qua_quality_value", "span", qua.quality);
 
 				// 効能
-				replaceItem("#review_qua_effect_item","review_qua_effect_value","span", qua.quality);
+				replaceItem("#review_qua_effect_item","review_qua_effect_value","span", qua.effect);
 
 				// URL
 				replaceItem("#review_qua_url_item","review_qua_url_value","span", "<a href='" + qua.url + "' target='_blank'>" + qua.url + "</a>");
@@ -518,7 +540,6 @@ function getLatLngFromKeyword(place){
 						$("#buttonQuaEntry").hide();
 						$("#buttonQuaEdit").show();
 						$("#buttonQuaDestroy").show();
-
 						$('#qua_entry_dialog').popup('show');
 					}
 				});
@@ -551,7 +572,6 @@ function getLatLngFromKeyword(place){
 					type: 'put',
 					dataType: "json",
 					success: function(data) {
-						alert("edit");
 					}
 				});
 			});
@@ -575,7 +595,6 @@ function getLatLngFromKeyword(place){
 						arrQuaMarkers[qua_id] = null;
 					}
 				});
-
 			});
 		})(jQuery);
   }
@@ -583,7 +602,6 @@ function getLatLngFromKeyword(place){
   function onOpenQuaEntryDialog(){
 		(function($){
 			$(function() {
-				// ひょっとしたら・・actionの書き換えが要るかもしれない
 				$('#new_qua').attr("action", "/quas/create_ajax");
 				$("#buttonQuaEntry").show();
 				$("#buttonQuaEdit").hide();
@@ -592,6 +610,9 @@ function getLatLngFromKeyword(place){
 				var latlng = mapObj.getCenter();
 				$("#qua_latitude").val(latlng.lat());
 				$("#qua_longitude").val(latlng.lng());
+				window.setTimeout(function(){
+					$("#qua_name").focus();
+				}, 100);
 			});
 		})(jQuery);
   }
@@ -601,6 +622,11 @@ function getLatLngFromKeyword(place){
 	var arrQuaMarkers = [];
 	// InfoWindows objects
 	var arrInfoWindows = [];
+	// hotel marker objects
+	var arrHotelMarkers = [];
+	// hotel InfoWindows objects
+	var arrHotelInfoWindows = [];
+
     function getQuaDialogString(id, name, quality, effect, stay_required, price, url, image_caption, image){
     	var ret =
     	  '<div id="content_qua_' + id + '" class="info_window">'+
@@ -660,11 +686,82 @@ function getLatLngFromKeyword(place){
 			google.maps.event.addListener(marker, 'click', function() {
 			  infowindow.open(mapObj,marker);
 			  // 楽天APIの呼び出しを行なう
+				$.ajax({
+					url: "hotels",
+					type: 'get',
+					data: "latitude=" + lat + "&longitude=" + lng,
+					dataType: "json",
+					success: function(data) {
+						if(data.root.error !== undefined){
+							// 周辺に楽天に登録されたホテルはない
+						}	else if(data.root.hotels !== undefined){
+							// ホテルあり InfoWindowを作成する
+							data.root.hotels.hotel.forEach(function(hotel){
+								entryHotel(hotel);
+							});
+						}
+					}
+				});
 			});
 			if(disp){
 			  infowindow.open(mapObj,marker);
 			}
 	}
+	// ホテルアイコン
+	var hotelIcon = new google.maps.MarkerImage('http://docs.google.com/uc?export=view&id=0B15A7hRyx7EIbk9qcUs3Q3A4MUk',
+		// This marker is 20 pixels wide by 32 pixels tall.
+		new google.maps.Size(24, 24),
+		// The origin for this image is 0,0.
+		new google.maps.Point(0,0),
+		// The anchor for this image is the base of the flagpole at 0,32.
+		new google.maps.Point(0, 24)
+	);
+	function getHotelDialogString(hotel){
+		var ret =
+			'<div class="info_window">'+
+			'<div id="siteNotice"></div>' +
+			'<img class="img_hotel" src="' + hotel.hotelBasicInfo.hotelImageUrl + '" style="float: right;"></img>' +
+			'<img class="img_hotel" src="' + hotel.hotelBasicInfo.roomImageUrl + '" style="float: right;"></img>' +
+			'<div class="firstheading"><h3 id="firstHeading">' + hotel.hotelBasicInfo.hotelName + '</h3></div>'+
+			'<div style="clear: both;"></div>' +
+			'<div id="bodyContent" class="min-width:450px; width: 100%; clear: both;">'+
+			'<div id="hotel_' + hotel.hotelBasicInfo.hotelNo + '_rating"></div>' +
+			'<p style="white-space: nowrap;">' + hotel.hotelBasicInfo.hotelSpecial.substr(0, 40) + '</p>'+
+			'<p><b>宿泊料金:</b>' + hotel.hotelBasicInfo.hotelMinCharge + '円〜</p>';
+			ret += '</div>';	// end of 'bodyContent'
+			ret += '<div><a href="' + hotel.hotelBasicInfo.reviewUrl + '" target="_blank">レビュー</a>&nbsp;&nbsp;';
+			ret += '<a href="' + hotel.hotelBasicInfo.planListUrl + '" target="_blank">宿泊プラン</a>';
+			ret += '</div>';
+		return ret;
+	}
+	function entryHotel(hotel){
+		// 座標を国際系に変換する
+		var latlng = J2GPoint(hotel.hotelBasicInfo.latitude, hotel.hotelBasicInfo.longitude);
+		// hotel marker objects
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(latlng[0], latlng[1]),
+			map: mapObj,
+			title: hotel.hotelBasicInfo.hotelName,
+			icon: hotelIcon
+		});
+		arrHotelMarkers[hotel.hotelNo] = marker;	// マーカーを配列で管理する
+		var infowindow = new google.maps.InfoWindow({
+			content: getHotelDialogString(hotel)
+		});
+		arrHotelInfoWindows[hotel.hotelNo] = infowindow;	// infowindowも配列で管理する
+		google.maps.event.addListener(marker, 'click', function() {
+		  infowindow.open(mapObj,marker);
+		});
+	}
+	function J2GPoint(lat, lng) {
+		var latlng = [];
+		lat = lat / 3600;
+		lng = lng / 3600;
+		latlng.push(lat - lat * 0.00010695 + lng * 0.000017464 + 0.0046017);
+		latlng.push(lng - lat * 0.000046038 - lng * 0.000083043 + 0.010040);
+		return latlng;
+	}
+
 	(function($){
 		$(function() {
 			$('#welcome_dialog').popup({
@@ -750,14 +847,13 @@ function getLatLngFromKeyword(place){
 		<h1>The QUA Map</h1>
 		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
                 <ul id="menu">
-                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"><button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
-
+                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text">
                     <ul id="qua_list">
                       <%= render partial: 'qua_list', locals: { quas: @quas} %>
                     </ul>
                 </ul>
 		</div>
-		<div id="adminmenu">日本温泉マップ</div>
+		<div id="adminmenu">温泉地図サービス</div>
 		<div id="gmap" style="width: 99%; min-height: 500px; border: 1px solid Gray;">
 		</div>
 		<div>
