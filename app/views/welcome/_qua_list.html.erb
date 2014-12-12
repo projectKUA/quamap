@@ -7,8 +7,8 @@
        <div class="qua_info" style="display:none;">
          <%= q.id %>,<%= q.name %>,<%= q.latitude %>,<%= q.longitude %>,<%= q.quality %>,<%= q.effect %>,<%= q.stay_required %>,<%= q.price  %>,<%= q.url  %>,<%= q.image1_caption %>,<%= q.image1.nil? ? '<img class="img_info_window" src="/assets/onsen.png">' : '<img class="img_info_window" src="/quas/' + q.id.to_s + '/show_image">' %>
        </div>
-       <div><button id="link_enter_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button></div>
-       <div><button id="link_show_review_' + id + '" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>
+       <div><button id="link_enter_review_<%= q.id %>" class="btn btn-sm btn-link review_dialog_open" onclick="reviewEntryLinkClicked(this)">レビューを書く</button></div>
+       <div><button id="link_show_review_<%= q.id %>" class="btn btn-sm btn-link review_dialog_open" onclick="reviewLinkClicked(this)">レビューを見る</button></div>
       </div>
       <%= q.image1.present? ? image_tag(show_image_qua_path(q), style:'max-width:50px;max-haight:50px;margin-right:10px;', align:'right') : image_tag('onsen.png', style:'max-width:50px;max-haight:50px;margin-right:10px;', align:'right') %>
      </div>

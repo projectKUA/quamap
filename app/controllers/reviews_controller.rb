@@ -20,9 +20,12 @@ class ReviewsController < ApplicationController
   # GET /reviews/new_ajax
   def new_ajax
     @qua = Qua.find(params[:qua_id])
+    count_review = Review.where("qua_id= ? and total_score is not null", params[:qua_id]).count
+    puts count_review
+    average_score = {'average_score' => calc_average}
     respond_to do |format|
       format.json {
-        render json: { :quas => @qua }
+        render json: { :reviews => @reviews, :quas => @qua, :average_score => average_score, :count_review => count_review}
       }
     end
   end
