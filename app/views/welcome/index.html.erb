@@ -44,16 +44,34 @@ function getLatLngFromKeyword(place){
         address: place
       }, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          if (results[0].geometry) {
+					for (var i in results) {
+						if (results[i].geometry) {
+	          	// qua_listにgeocodeの検索結果を追記する
 
-            // 緯度経度を取得
-            var latlng = results[0].geometry.location;
-
-            // 住所を取得(日本の場合だけ「日本, 」を削除)
-            var address = results[0].formatted_address.replace(/^日本, /, '');
-          	$("#qua_latitude").val(latlng.k);
-          	$("#qua_longitude").val(latlng.B);
-	          mapObj.panTo(latlng);
+	            // 緯度経度を取得
+	            var latlng = results[i].geometry.location;
+	            // 住所を取得(日本の場合だけ「日本, 」を削除)
+	            // 「名前」として表示する
+	            var address = results[i].formatted_address.replace(/^日本, /, '');
+	          	$("#qua_latitude").val(latlng.k);
+	          	$("#qua_longitude").val(latlng.D);
+							$("#qua_list").append('<li><div class="qua_search_result"><div style="overflow:hidden;"><div style="float:left;">' +
+								'<div class="qua_name"><b>' + address + '</b></div>' +
+								'<div class="qua_info" style="display:none;">,' + address + ',' + latlng.k + ',' + latlng.D + '</div>' +
+								'</div></div></div></li>');
+							$('div.qua_search_result').on("click", function() {
+								var qua = $(this).find('div.qua_info').text().split(',');
+								var lat = qua[2];
+								var lon = qua[3];
+								mapObj.panTo(new google.maps.LatLng(lat, lon));
+							});
+							if ($('div.qua_search_result') === null ) {$('ul#qua_list').hide()};
+							if ($('#menu input').val() != "" && $('div.qua_search_result').length > 0){
+								$('ul#qua_list').show();
+							} else {
+								$('ul#qua_list').hide();
+							}
+						}
           }
         } else if (status == google.maps.GeocoderStatus.ERROR) {
           // console.log("サーバとの通信時に何らかのエラーが発生！");
@@ -750,8 +768,7 @@ function getLatLngFromKeyword(place){
 		<h1>The QUA Map</h1>
 		<div id="search_area" style="float: right; margin: 5px 1% 5px 0px;">
                 <ul id="menu">
-                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text"><button type="button" class='btn btn-default btn-xs' onclick="getLatLngFromKeyword(search.value)">検索</button>
-
+                    <span class='glyphicon glyphicon-search'></span><input id="inc_search" type="text">
                     <ul id="qua_list">
                       <%= render partial: 'qua_list', locals: { quas: @quas} %>
                     </ul>

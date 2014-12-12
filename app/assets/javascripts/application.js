@@ -30,6 +30,10 @@ ajaxPost = function(input)
            var lat = qua[2];
            var lon = qua[3];
            mapObj.panTo(new google.maps.LatLng(lat, lon));
+           if(qua[0] !== null ){
+             var qua_id = qua[0].trim();
+             arrInfoWindows[qua_id].open(mapObj,arrQuaMarkers[qua_id]);
+           }
         });
       }
   });
@@ -40,6 +44,7 @@ $('#inc_search').on('keyup', function() {
   if(preInput !== input){
     clearTimeout(preFunc);
     preFunc = setTimeout(ajaxPost(input), 500);
+    getLatLngFromKeyword(input);
   }
   preInput = input;
   if ($('div.qua_search_result') == null ) {$('ul#qua_list').hide()};
