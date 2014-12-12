@@ -33,28 +33,25 @@
 	<script type="text/javascript">
 
 function getLatLngFromKeyword(place){
-  (function($){
-    $(function() {
-      // ジオコーダのコンストラクタ
-      var geocoder = new google.maps.Geocoder();
-      // geocodeリクエストを実行。
-      // 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
-      // 第２引数はコールバック関数。
-      geocoder.geocode({
-        address: place
-      }, function(results, status) {
+	(function($){
+		$(function() {
+			// ジオコーダのコンストラクタ
+			var geocoder = new google.maps.Geocoder();
+			// geocodeリクエストを実行。
+			// 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
+			// 第２引数はコールバック関数。
+			geocoder.geocode({
+				address: place
+			}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
 					for (var i in results) {
 						if (results[i].geometry) {
-	          	// qua_listにgeocodeの検索結果を追記する
-
-	            // 緯度経度を取得
-	            var latlng = results[i].geometry.location;
-	            // 住所を取得(日本の場合だけ「日本, 」を削除)
-	            // 「名前」として表示する
-	            var address = results[i].formatted_address.replace(/^日本, /, '');
-	          	$("#qua_latitude").val(latlng.k);
-	          	$("#qua_longitude").val(latlng.D);
+							// qua_listにgeocodeの検索結果を追記する
+							// 緯度経度を取得
+							var latlng = results[i].geometry.location;
+							// 住所を取得(日本の場合だけ「日本, 」を削除)
+							// 「名前」として表示する
+							var address = results[i].formatted_address.replace(/^日本, /, '');
 							$("#qua_list").append('<li><div class="qua_search_result"><div style="overflow:hidden;"><div style="float:left;">' +
 								'<div class="qua_name"><b>' + address + '</b></div>' +
 								'<div class="qua_info" style="display:none;">,' + address + ',' + latlng.k + ',' + latlng.D + '</div>' +
@@ -65,20 +62,39 @@ function getLatLngFromKeyword(place){
 								var lon = qua[3];
 								mapObj.panTo(new google.maps.LatLng(lat, lon));
 							});
-							/*
-							if ($('div.qua_search_result') === null ) {$('ul#qua_list').hide()};
-							if ($('#menu input').val() != "" && $('div.qua_search_result').length > 0){
-								$('ul#qua_list').show();
-							} else {
-								$('ul#qua_list').hide();
-							}
-							*/
 						}
-          }
-        }
-      });
-    });
-  })(jQuery);
+					}
+				}
+			});
+		});
+	})(jQuery);
+}
+function getLatLngFromKeywordOnQuaEntry(place){
+	(function($){
+		$(function() {
+			// ジオコーダのコンストラクタ
+			var geocoder = new google.maps.Geocoder();
+			// geocodeリクエストを実行。
+			// 第１引数はGeocoderRequest。住所⇒緯度経度座標の変換時はaddressプロパティを入れればOK。
+			// 第２引数はコールバック関数。
+			geocoder.geocode({
+				address: place
+			}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+					if (results[0].geometry) {
+						// 緯度経度を取得
+						var latlng = results[0].geometry.location;
+						// 住所を取得(日本の場合だけ「日本, 」を削除)
+						// 「名前」として表示する
+						var address = results[0].formatted_address.replace(/^日本, /, '');
+						$("#qua_latitude").val(latlng.k);
+						$("#qua_longitude").val(latlng.D);
+						mapObj.panTo(latlng);
+					}
+				}
+			});
+		});
+	})(jQuery);
 }
 
 	/** 「レビューを見る」クリック時の挙動 */
@@ -152,7 +168,7 @@ function getLatLngFromKeyword(place){
 				replaceItem("#review_qua_quality_item","review_qua_quality_value", "span", qua.quality);
 
 				// 効能
-				replaceItem("#review_qua_effect_item","review_qua_effect_value","span", qua.quality);
+				replaceItem("#review_qua_effect_item","review_qua_effect_value","span", qua.effect);
 
 				// URL
 				replaceItem("#review_qua_url_item","review_qua_url_value","span", "<a href='" + qua.url + "' target='_blank'>" + qua.url + "</a>");
@@ -557,7 +573,6 @@ function getLatLngFromKeyword(place){
 					type: 'put',
 					dataType: "json",
 					success: function(data) {
-						alert("edit");
 					}
 				});
 			});
