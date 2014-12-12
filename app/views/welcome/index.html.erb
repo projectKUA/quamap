@@ -755,8 +755,10 @@ function getLatLngFromKeywordOnQuaEntry(place){
 	}
 	function J2GPoint(lat, lng) {
 		var latlng = [];
-		latlng.push((lat - lat * 0.00010695 + lng * 0.000017464 + 0.0046017) / 3600);
-		latlng.push((lng - lat * 0.000046038 - lng * 0.000083043 + 0.010040) / 3600);
+		lat = lat / 3600;
+		lng = lng / 3600;
+		latlng.push(lat - lat * 0.00010695 + lng * 0.000017464 + 0.0046017);
+		latlng.push(lng - lat * 0.000046038 - lng * 0.000083043 + 0.010040);
 		return latlng;
 	}
 
