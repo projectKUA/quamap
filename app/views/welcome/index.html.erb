@@ -702,9 +702,37 @@ function getLatLngFromKeywordOnQuaEntry(place){
 						}
 					}
 				});
+				// 念のため、ホテルのアイコン・マーカーを消す
+				arrHotelInfoWindows.forEach(function(infowindow){
+					// infoWindowを閉じて消す
+					infowindow.close();
+					infowindow = null;
+				})
+				arrHotelMarkers.forEach(function(marker){
+					// 対象のアイコンを消す
+					marker.setMap(null);
+					marker = null;
+				})
 			});
 			if(disp){
 			  infowindow.open(mapObj,marker);
+			  // 楽天APIの呼び出しを行なう
+				$.ajax({
+					url: "hotels",
+					type: 'get',
+					data: "latitude=" + lat + "&longitude=" + lng,
+					dataType: "json",
+					success: function(data) {
+						if(data.root.error !== undefined){
+							// 周辺に楽天に登録されたホテルはない
+						}	else if(data.root.hotels !== undefined){
+							// ホテルあり InfoWindowを作成する
+							data.root.hotels.hotel.forEach(function(hotel){
+								entryHotel(hotel);
+							});
+						}
+					}
+				});
 			}
 	}
 	// ホテルアイコン
